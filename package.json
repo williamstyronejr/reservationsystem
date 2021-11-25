@@ -1,0 +1,33 @@
+{
+  "name": "reservationsystem",
+  "version": "0.0.1",
+  "description": "A Graphical Reservation system web app",
+  "main": "server/src/index.ts",
+  "scripts": {
+    "start": "npm run production --prefix server",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run start --prefix client\"",
+    "build": "lerna run --concurrency 1 --stream build",
+    "precommit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
+    "prepush": "lerna run --concurrency 1 --stream prepush --since HEAD --exclude-dependents",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "bootstrap": "lerna bootstrap"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamstyronejr/reservationsystem.git"
+  },
+  "author": "Tyrone Williams",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/williamstyronejr/reservationsystem/issues"
+  },
+  "homepage": "https://github.com/williamstyronejr/reservationsystem#readme",
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "husky": "^7.0.0"
+  },
+  "dependencies": {
+    "lerna": "^4.0.0"
+  }
+}
