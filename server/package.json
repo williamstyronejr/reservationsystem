@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "start": "ts-node --require dotenv/config src/index.ts ",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' --require dotenv/config src/index.ts",
     "build": "tsc",
     "test": "jest",
     "precommit": "lint-staged",
@@ -34,6 +34,7 @@
     "eslint": "^8.3.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^16.0.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "express": "^4.17.1",
     "pg": "^8.7.1",
