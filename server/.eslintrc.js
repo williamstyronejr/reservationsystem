@@ -12,7 +12,7 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
-  extends: ['airbnb-base', 'airbnb-typescript/base'],
+  extends: ['airbnb-base', 'airbnb-typescript/base', 'prettier'],
   rules: {
     'consistent-return': 0,
     'no-unused-vars': 1,
