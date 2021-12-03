@@ -1,7 +1,9 @@
-import redis, { RedisClient } from 'redis';
+import { createClient } from 'redis';
 import logger from './logger';
 
-let redisClient: RedisClient | null;
+type RedisClientType = ReturnType<typeof createClient>;
+
+let redisClient: RedisClientType | null;
 
 /**
  * Sets up connection to redis. Prioritizes URL to form connection.
@@ -10,28 +12,26 @@ let redisClient: RedisClient | null;
  * @param URL URL URL connection string for redis
  * @returns Returns the redis client.
  */
-export function setupRedis(
+export async function setupRedis(
   HOST = 'localhost',
   PORT = 6379,
   URL: string | null = null,
-): Promise<RedisClient> {
-  redisClient = URL ? redis.createClient(URL) : redis.createClient(PORT, HOST);
+): Promise<RedisClientType> {
+  redisClient = URL
+    ? createClient({ url: URL })
+    : createClient({ socket: { host: HOST, port: PORT } });
 
-  return new Promise((res, rej) => {
-    redisClient?.on('error', (err) => {
-      rej(err);
-    });
+  await redisClient.connect();
+  await redisClient.ping();
+  logger.info(`Connected to redis ${URL || `${HOST}:${PORT}`}`);
 
-    redisClient?.on('ready', () => {
-      logger.info(`Redis connection on ${HOST}:${PORT}`);
-      res(redisClient as RedisClient);
-    });
-  });
+  return redisClient as RedisClientType;
 }
 
 /**
- * Closes connection to redis.
+ * Closes all connections to redis gracefully.
+ * @return Returns a promise to resolve when the client is closed.
  */
-export function closeRedis(): void {
-  if (redisClient) redisClient.quit();
+export async function closeRedis(): Promise<void> {
+  if (redisClient) await redisClient.disconnect();
 }
