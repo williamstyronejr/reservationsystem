@@ -16,18 +16,15 @@ const { REDIS_HOST, REDIS_PORT, REDIS_URL } = process.env;
  */
 function gracefulShutdown(server: ServerAsync): void {
   async function exitHandler(options: { exit?: boolean } = {}) {
-    if (server.closeAsync)
-      await server
-        .closeAsync()
-        .then(() => {
-          logger.info('Server gracefully shut down');
-        })
-        .finally(() => {
-          closeRedis();
-        })
-        .catch((err: Error) => {
-          logger.warn(`Error on shutdown, ${err.stack}`);
-        });
+    if (server.closeAsync) {
+      try {
+        await server.closeAsync();
+        logger.info('Server graceful shut down');
+        await closeRedis();
+      } catch (err: any) {
+        logger.warn(`Error on shutdown, ${err}`);
+      }
+    }
 
     if (options.exit) process.exit();
   }
@@ -54,7 +51,7 @@ function gracefulShutdown(server: ServerAsync): void {
 export default async function startServer(
   IP: string,
   PORT: number,
-): Promise<http.Server> {
+): Promise<ServerAsync> {
   const httpServer: ServerAsync = http.createServer(app);
 
   await db.sequelize.sync({ force: false });
@@ -67,8 +64,13 @@ export default async function startServer(
   const originalClose = httpServer.close.bind(httpServer);
 
   httpServer.closeAsync = () =>
-    new Promise((resolveClose) => {
-      originalClose(resolveClose);
+    new Promise((res) => {
+      // Clean up services then call to original close
+      db.sequelize.close().then(() => {
+        closeRedis().then(() => {
+          originalClose(res);
+        });
+      });
     });
 
   gracefulShutdown(httpServer);
