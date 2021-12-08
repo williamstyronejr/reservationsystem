@@ -29,9 +29,9 @@ export async function setupRedis(
 }
 
 /**
- * Closes all connections to redis gracefully.
+ * Closes all connections to redis forcefully.
  * @return Returns a promise to resolve when the client is closed.
  */
 export async function closeRedis(): Promise<void> {
-  if (redisClient) await redisClient.disconnect();
+  if (redisClient) await redisClient.quit();
 }
