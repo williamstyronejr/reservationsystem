@@ -19,8 +19,10 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'react/jsx-props-no-spreading': 0,
+    'consistent-return': 0,
     'react/function-component-definition': [
-      2,
+      1,
       {
         namedComponents: 'arrow-function',
         unnamedComponents: 'arrow-function',
