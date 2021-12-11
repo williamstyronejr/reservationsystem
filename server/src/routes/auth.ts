@@ -2,11 +2,28 @@ import { Router, Response, Request, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { createUser } from '../services/user';
 import { requireLocalSignin } from '../middlewares/auth';
-import { validateSignup } from '../middlewares/validation';
+import { validateSignup, validateRecovery } from '../middlewares/validation';
 import { hashString } from '../utils/utils';
 
 const jsonParser = bodyParser.json({});
 const router = Router();
+
+router.post(
+  '/recovery',
+  jsonParser,
+  validateRecovery,
+  (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+
+    try {
+      // Send recovery email
+
+      res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 router.post(
   '/signin',
