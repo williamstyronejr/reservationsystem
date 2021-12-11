@@ -20,7 +20,6 @@ function gracefulShutdown(server: ServerAsync): void {
       try {
         await server.closeAsync();
         logger.info('Server graceful shut down');
-        await closeRedis();
       } catch (err: any) {
         logger.warn(`Error on shutdown, ${err}`);
       }
