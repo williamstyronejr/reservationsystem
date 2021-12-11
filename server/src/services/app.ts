@@ -58,11 +58,11 @@ app.use(
   }),
 );
 
-app.use(
-  csurf({
-    sessionKey: 'session',
-  }),
-);
+// app.use(
+//   csurf({
+//     sessionKey: 'session',
+//   }),
+// );
 
 app.use(passport.initialize());
 
