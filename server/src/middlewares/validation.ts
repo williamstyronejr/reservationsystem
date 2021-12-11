@@ -54,7 +54,6 @@ const passwordValidation = (fieldName = 'password') => [
     .withMessage('Passwords must match.'),
 ];
 
-// eslint-disable-next-line import/prefer-default-export
 export const validateSignup = [
   ...usernameValidation(),
   ...emailValidation(),
@@ -62,3 +61,5 @@ export const validateSignup = [
   ...passwordValidation('confirm'),
   checkValidation,
 ];
+
+export const validateRecovery = [...emailValidation(), checkValidation];

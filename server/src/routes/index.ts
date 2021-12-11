@@ -1,9 +1,47 @@
+import path from 'path';
 import { Application, Request, Response, NextFunction } from 'express';
 import AuthRouter from './auth';
 import logger from '../services/logger';
 
+const { NODE_ENV } = process.env;
+
 export default function setupRoutes(app: Application) {
   app.use(AuthRouter);
+
+  app.get('/getCSRFToken', (req: Request, res: Response) => {
+    res.json({ CSRFToken: req.csrfToken() });
+  });
+
+  app.get('/*', (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.sendFile(
+        path.join(
+          NODE_ENV === 'development'
+            ? path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'client',
+                'build',
+                'index.html',
+              )
+            : path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                '..',
+                'client',
+                'build',
+                'index.html',
+              ),
+        ),
+      );
+    } catch (err) {
+      next(err);
+    }
+  });
 
   // Catch all error handler
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
