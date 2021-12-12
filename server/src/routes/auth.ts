@@ -17,7 +17,6 @@ router.post(
 
     try {
       // Send recovery email
-
       res.json({ success: true });
     } catch (err) {
       next(err);
@@ -29,8 +28,11 @@ router.post(
   '/signin',
   jsonParser,
   requireLocalSignin,
-  (req: Request, res: Response, next: NextFunction) => {
-    res.json({});
+  (req: Request, res: Response) => {
+    const { user }: any = req;
+
+    if (!user) return res.json({ success: false });
+    res.json({ user: { id: user.id, username: user.username } });
   },
 );
 
@@ -45,7 +47,13 @@ router.post(
       const hash = await hashString(password);
       const user = await createUser(username, email, hash);
 
-      res.json({ success: true });
+      res.json({
+        success: true,
+        user: {
+          id: user.id,
+          username: user.username,
+        },
+      });
     } catch (err: any) {
       // Existing unique fields
       if (err.name && err.name === 'SequelizeUniqueConstraintError') {
