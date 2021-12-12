@@ -1,31 +1,32 @@
 import * as React from 'react';
+import { useMutation } from 'react-query';
 
 const RecoveryPage = () => {
   const [email, setEmail] = React.useState<string>('');
-  const [success, setSuccess] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [fieldError, setFieldError] = React.useState<string | null>(null);
+
+  const { data, error, isLoading, mutate } = useMutation(
+    async (inputEmail: string) => {
+      const res = await fetch('/recovery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: inputEmail }),
+      });
+
+      const jsonData: any = await res.json();
+      if (jsonData.errors) return setFieldError(jsonData.errors.email);
+      return jsonData;
+    },
+  );
 
   const submitHandler = (evt: React.SyntheticEvent<HTMLFormElement>): any => {
     evt.preventDefault();
+    if (isLoading) return;
 
-    if (email.trim() === '') return setError('Please provide a valid email.');
-    setError(null);
-    setSuccess(false);
-
-    fetch('/recovery', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    })
-      .then((res: Response) => res.json())
-      .then((data) => {
-        // eslint-disable-next-line no-console
-        if (data.errors) return setError(data.errors.email);
-        setSuccess(true);
-      })
-      .catch(() => {
-        setError('An server error has occurred, please try again.');
-      });
+    if (email.trim() === '')
+      return setFieldError('Please provide a valid email.');
+    setFieldError(null);
+    mutate(email);
   };
 
   return (
@@ -40,11 +41,17 @@ const RecoveryPage = () => {
 
           {error ? (
             <div className="form__notification form__notification--error">
-              {error}
+              An error occurred during your request, please try again.
             </div>
           ) : null}
 
-          {success ? (
+          {fieldError ? (
+            <div className="form__notification form__notification--error">
+              {fieldError}
+            </div>
+          ) : null}
+
+          {data && data.success ? (
             <div className="form__notification form__notification--success">
               Please check your email for recovery instructions.
             </div>
@@ -64,7 +71,11 @@ const RecoveryPage = () => {
           </label>
         </fieldset>
 
-        <button className="form__btn form__btn-submit" type="submit">
+        <button
+          className="form__btn form__btn-submit"
+          type="submit"
+          disabled={isLoading}
+        >
           Submit
         </button>
       </form>
