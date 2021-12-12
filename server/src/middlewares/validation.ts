@@ -49,7 +49,7 @@ const passwordValidation = (fieldName = 'password') => [
     .isLength({ min: 4 })
     .withMessage('Password must be at least 4 characters')
     .custom((value, { req }) =>
-      fieldName === 'confirm' ? value === req.body.password : true,
+      fieldName === 'confirmPassword' ? value === req.body.password : true,
     )
     .withMessage('Passwords must match.'),
 ];
@@ -58,7 +58,7 @@ export const validateSignup = [
   ...usernameValidation(),
   ...emailValidation(),
   ...passwordValidation(),
-  ...passwordValidation('confirm'),
+  ...passwordValidation('confirmPassword'),
   checkValidation,
 ];
 
