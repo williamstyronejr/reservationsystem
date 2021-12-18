@@ -11,4 +11,13 @@ export function createUser(username: string, email: string, hash: string) {
   return db.models.User.create({ username, email, hash });
 }
 
-export function updateUser() {}
+/**
+ * Finds and returns a user by their id.
+ * @param id Id of user
+ * @return Returns a user object if found, otherwise returns null.
+ */
+export function findUserById(
+  id: number | string,
+): Promise<Record<string, unknown> | null> {
+  return db.models.User.findByPk(id);
+}
