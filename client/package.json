@@ -12,6 +12,7 @@
     "@types/react": "^17.0.36",
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.2",
+    "axios": "^0.24.0",
     "cypress": "^9.1.0",
     "eslint-config-airbnb": "^19.0.1",
     "eslint-config-airbnb-typescript": "^16.0.0",
