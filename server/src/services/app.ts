@@ -1,19 +1,21 @@
-import express from 'express';
+import express, { NextFunction, Response, Request } from 'express';
 import cors from 'cors';
 import path from 'path';
 import csurf from 'csurf';
 import passport from 'passport';
 import session from 'express-session';
-import MemoryStore from 'memorystore';
+import SessionStore from 'connect-session-sequelize';
 import setupRoutes from '../routes/index';
+import db from '../models/index';
 
+const SequelizeStore = SessionStore(session.Store);
 require('./passport');
 
 const { NODE_ENV, SESSION_SECRET, CLIENT_DEV_URL } = process.env;
 const app = express();
 
 const cookieSettings: session.CookieOptions = {};
-if (NODE_ENV !== 'development') {
+if (NODE_ENV !== 'development' && NODE_ENV !== 'test') {
   cookieSettings.secure = true;
   cookieSettings.httpOnly = true;
 }
@@ -47,24 +49,30 @@ app.use(
 
 app.use(
   session({
-    store: new (MemoryStore(session))({
-      checkPeriod: 84600,
+    store: new SequelizeStore({
+      db: db.sequelize,
     }),
-    secret: SESSION_SECRET || '',
+    secret: SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: true,
-    cookie: cookieSettings,
+    unset: 'destroy',
+    saveUninitialized: false,
+    cookie: { ...cookieSettings, maxAge: 1800000 },
     name: 'session',
   }),
 );
 
-// app.use(
-//   csurf({
-//     sessionKey: 'session',
-//   }),
-// );
+app.use(csurf({ sessionKey: 'session' }));
 
 app.use(passport.initialize());
+app.use(passport.session());
+
+// Error handler for invalid/expired CSRFTokens, sends 403 response
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  if (!err) return next();
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
+
+  return res.status(403).json({ csrf: true });
+});
 
 setupRoutes(app);
 
