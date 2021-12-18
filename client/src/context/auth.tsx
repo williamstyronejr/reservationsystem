@@ -1,12 +1,17 @@
 import * as React from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import LoadingScreen from '../components/LoadingScreen';
 
 interface State {
   id: number | null;
+  username: string | null;
   authenticated: boolean;
 }
 
 const initState: State = {
   id: null,
+  username: null,
   authenticated: false,
 };
 
@@ -15,7 +20,13 @@ const AuthContext = React.createContext({});
 function authReducer(state: State, action: { type: String; payload?: any }) {
   switch (action.type) {
     case 'LOGIN':
-      return { ...state, id: action.payload.id, authenticated: true };
+      return {
+        ...state,
+        id: action.payload.id,
+        username: action.payload.username,
+        authenticated: true,
+      };
+
     case 'SIGNOUT':
       return {
         ...state,
@@ -30,9 +41,37 @@ function authReducer(state: State, action: { type: String; payload?: any }) {
 export const AuthProvider = (props: any) => {
   const [state, dispatch] = React.useReducer(authReducer, initState);
   const value = React.useMemo(() => ({ state, dispatch }), [state, dispatch]);
+  useQuery('csrf', async () => {
+    const res = await axios.get('/getCSRFToken');
+    const csrfToken = res.data.CSRFToken;
+    axios.defaults.headers.common['csrf-token'] = csrfToken;
 
-  // React.useEffect(() => {}, []);
+    return res.data;
+  });
 
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery(
+    '/session',
+    async () => {
+      const { data } = await axios.get('/session');
+      return data;
+    },
+    { retry: false, refetchOnMount: false },
+  );
+
+  React.useEffect(() => {
+    if (user) {
+      dispatch({
+        type: 'LOGIN',
+        payload: user,
+      });
+    }
+  }, [user, error]);
+
+  if (isLoading) return <LoadingScreen />;
   return <AuthContext.Provider value={value} {...props} />;
 };
 
@@ -52,10 +91,17 @@ export function useAuthContext(): {
     });
   }
 
-  function signout() {
-    dispatch({
-      type: 'SIGNOUT',
-    });
+  async function signout() {
+    try {
+      const { data } = await axios.post('/signout');
+
+      if (data.success)
+        dispatch({
+          type: 'SIGNOUT',
+        });
+    } catch (err) {
+      //
+    }
   }
 
   return {
