@@ -19,6 +19,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'import/prefer-default-export': 0,
     'react/jsx-props-no-spreading': 0,
     'consistent-return': 0,
     'react/function-component-definition': [
