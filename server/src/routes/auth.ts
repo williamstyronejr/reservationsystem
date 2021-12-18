@@ -1,7 +1,7 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { createUser } from '../services/user';
-import { requireLocalSignin } from '../middlewares/auth';
+import { authenticateLocalSignin } from '../middlewares/auth';
 import { validateSignup, validateRecovery } from '../middlewares/validation';
 import { hashString } from '../utils/utils';
 
@@ -27,7 +27,7 @@ router.post(
 router.post(
   '/signin',
   jsonParser,
-  requireLocalSignin,
+  authenticateLocalSignin,
   (req: Request, res: Response) => {
     const { user }: any = req;
 
@@ -71,6 +71,15 @@ router.post(
 
       return next(err);
     }
+  },
+);
+
+router.post(
+  '/signout',
+  async (req: Request, res: Response, next: NextFunction) => {
+    req.logOut();
+
+    res.json({ success: true });
   },
 );
 
