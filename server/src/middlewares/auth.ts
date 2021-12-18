@@ -1,4 +1,17 @@
 import passport from 'passport';
+import { Request, Response, NextFunction } from 'express';
 
-// eslint-disable-next-line import/prefer-default-export
-export const requireLocalSignin = passport.authenticate('local', {});
+export const authenticateLocalSignin = passport.authenticate('local', {});
+export const requireLocalSignin = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!req.isAuthenticated() || !req.user) {
+    const err: any = new Error('User not authenticated.');
+    err.status = 401;
+    return next(err);
+  }
+
+  next();
+};
