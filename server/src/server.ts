@@ -1,8 +1,8 @@
 import http from 'http';
-import app from './services/app';
-import { setupRedis, closeRedis } from './services/redis';
 import logger from './services/logger';
 import db from './models/index';
+import app from './services/app';
+import { setupRedis, closeRedis } from './services/redis';
 
 interface ServerAsync extends http.Server {
   closeAsync?: Function;
