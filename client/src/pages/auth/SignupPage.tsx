@@ -1,12 +1,18 @@
 import * as React from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Input from '../../components/Input';
 import { useAuthContext } from '../../context/auth';
+import { validateAuth } from '../../utils/validation';
 
 const SignupPage = () => {
   const navigate = useNavigate();
   const { signin, state } = useAuthContext();
+  const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>(
+    {},
+  );
+
   const { error, isLoading, mutate } = useMutation(
     async ({
       username,
@@ -19,15 +25,14 @@ const SignupPage = () => {
       password: string;
       confirmPassword: string;
     }) => {
-      const res = await fetch('/signup', {
+      const { data } = await axios('/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password, confirmPassword }),
+        data: { username, email, password, confirmPassword },
       });
 
-      const jsonData = await res.json();
-      if (jsonData.user) signin(jsonData.user);
-      return jsonData;
+      if (data.user) signin(data.user);
+      return data;
     },
   );
 
@@ -35,6 +40,9 @@ const SignupPage = () => {
     evt.preventDefault();
     const formData = new FormData(evt.currentTarget);
     const fields: any = Object.fromEntries(formData.entries());
+
+    const validationErrors = validateAuth(fields);
+    if (validationErrors) return setFieldErrors(validationErrors);
     mutate(fields);
   }
 
@@ -52,10 +60,14 @@ const SignupPage = () => {
         </header>
 
         <fieldset className="form__field">
-          <Input name="email" type="text" />
-          <Input name="username" type="text" />
-          <Input name="password" type="password" />
-          <Input name="confirmPassword" type="password" />
+          <Input name="email" type="text" error={fieldErrors.email} />
+          <Input name="username" type="text" error={fieldErrors.username} />
+          <Input name="password" type="password" error={fieldErrors.password} />
+          <Input
+            name="confirmPassword"
+            type="password"
+            error={fieldErrors.confirmPassword}
+          />
         </fieldset>
 
         <button

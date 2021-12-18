@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Input';
@@ -9,15 +10,10 @@ const SigninPage = () => {
   const { signin, state } = useAuthContext();
   const { error, isLoading, mutate } = useMutation(
     async ({ username, password }: { username: string; password: string }) => {
-      const res = await fetch('/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
+      const { data } = await axios.post('/signin', { username, password });
 
-      const jsonData = await res.json();
-      if (jsonData.user) signin(jsonData.user);
-      return jsonData;
+      if (data.user) signin(data.user);
+      return data;
     },
   );
 
@@ -36,14 +32,16 @@ const SigninPage = () => {
         <header className="form__header">
           {error ? (
             <div className="form__notification form__notification--error">
-              An error occurred during your request, please try again.
+              {(error as any).response.status === 401
+                ? 'Invalid username or password.'
+                : 'An error occurred during your request, please try again.'}
             </div>
           ) : null}
         </header>
 
         <fieldset className="form__field">
-          <Input name="username" type="text" />
-          <Input name="password" type="password" />
+          <Input name="username" type="text" error={null} />
+          <Input name="password" type="password" error={null} />
         </fieldset>
 
         <button
