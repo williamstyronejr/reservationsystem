@@ -6,7 +6,7 @@ import HomePage from './pages/Homepage';
 import SigninPage from './pages/auth/SigninPage';
 import SignupPage from './pages/auth/SignupPage';
 import RecoveryPage from './pages/auth/RecoveryPage';
-import Header from './components/Header';
+import LandingLayout from './layouts/LandingLayout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,17 +20,38 @@ const queryClient = new QueryClient({
   },
 });
 
+const LandingPages = [
+  {
+    path: '/',
+    component: <HomePage />,
+  },
+  {
+    path: '/recovery',
+    component: <RecoveryPage />,
+  },
+  {
+    path: '/signup',
+    component: <SignupPage />,
+  },
+  {
+    path: '/signin',
+    component: <SigninPage />,
+  },
+];
+
 const Root = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <main className="page__main">
-        <Header />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/recovery" element={<RecoveryPage />} />
-            <Route path="/signin" element={<SigninPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+            {LandingPages.map((elem) => (
+              <Route
+                key={elem.path}
+                path={elem.path}
+                element={<LandingLayout>{elem.component}</LandingLayout>}
+              />
+            ))}
           </Routes>
         </BrowserRouter>
       </main>
