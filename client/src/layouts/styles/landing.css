@@ -47,6 +47,7 @@
   text-align: center;
   width: 100%;
   background-color: rgb(228, 228, 228);
+  z-index: 5;
 }
 
 .header--active .header__nav {
