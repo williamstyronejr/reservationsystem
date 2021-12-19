@@ -4,7 +4,9 @@ const Input = ({
   name,
   type,
   error,
+  label,
 }: {
+  label: string;
   name: string;
   type: string;
   error: string | null;
@@ -14,6 +16,7 @@ const Input = ({
   return (
     <label className="form__label" htmlFor={`${name}-input`}>
       {error ? <div className="form__fielderror">{error}</div> : null}
+      <span className="form__labeling">{label}</span>
       <input
         id={`${name}-input`}
         name={name}
