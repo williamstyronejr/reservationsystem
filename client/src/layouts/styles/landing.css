@@ -1,0 +1,130 @@
+.header {
+  height: 60px;
+}
+
+.header__toggle {
+  background-color: transparent;
+  border: none;
+  z-index: 10;
+  margin-left: 5px;
+  position: absolute;
+  top: 20px;
+  right: 10px;
+}
+
+.header__toggle:hover {
+  cursor: pointer;
+}
+
+.header__bar {
+  display: block;
+  width: 35px;
+  height: 2px;
+  background-color: var(--color-text);
+  margin: 0 auto 6px auto;
+  transition: 0.4s;
+  border-radius: 3px;
+}
+
+.header--active .header__bar--1 {
+  -webkit-transform: rotate(-45deg) translate(-18px, 2px);
+  transform: rotate(-45deg) translate(-18px, 2px);
+}
+
+.header--active .header__bar--2 {
+  opacity: 0;
+}
+
+.header--active .header__bar--3 {
+  -webkit-transform: rotate(45deg) translate(-9px, 7px);
+  transform: rotate(45deg) translate(-9px, 7px);
+}
+
+.header__nav {
+  display: none;
+  position: absolute;
+  top: 60px;
+  text-align: center;
+  width: 100%;
+  background-color: rgb(228, 228, 228);
+}
+
+.header--active .header__nav {
+  display: block;
+}
+
+.header__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__item {
+  margin: 10px 0;
+}
+
+.header__link {
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: var(--color-link);
+}
+
+.header__list:hover {
+  color: var(--color-link-hover);
+}
+
+.footer {
+  background-color: #313a46;
+  padding: 3em 10px;
+}
+
+.footer__info {
+  padding-bottom: 10px;
+}
+
+.footer__logo-link {
+  color: var(--color-text-off);
+  text-decoration: none;
+  font-size: 1.75rem;
+}
+
+.footer__description {
+  color: var(--color-subtle);
+  font-size: 1.5rem;
+}
+
+.footer__list {
+  list-style: none;
+  margin: 0 0 25px 0;
+  padding: 0;
+}
+
+.footer__item {
+  margin-bottom: 10px;
+  color: var(--color-subtle);
+}
+
+.footer__item--title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-off);
+  margin-bottom: 20px;
+}
+
+.footer__link {
+  color: var(--color-subtle);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.footer__copyright {
+  font-size: 1.5rem;
+  text-align: center;
+  color: var(--color-subtle);
+  padding: 10px 0;
+}
+
+@media only screen and (min-width: 600px) {
+  .footer__list {
+  }
+}
