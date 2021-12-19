@@ -27,9 +27,10 @@ const SigninPage = () => {
   if (state.authenticated) navigate('/dashboard');
 
   return (
-    <section className="signin">
+    <section className="page-form">
       <form className="form" onSubmit={submitHandler}>
         <header className="form__header">
+          <h3 className="form__heading">Signin to your account</h3>
           {error ? (
             <div className="form__notification form__notification--error">
               {(error as any).response.status === 401
@@ -40,8 +41,13 @@ const SigninPage = () => {
         </header>
 
         <fieldset className="form__field">
-          <Input name="username" type="text" error={null} />
-          <Input name="password" type="password" error={null} />
+          <Input name="username" type="text" label="Username" error={null} />
+          <Input
+            name="password"
+            type="password"
+            label="Password"
+            error={null}
+          />
         </fieldset>
 
         <button

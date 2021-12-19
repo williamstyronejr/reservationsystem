@@ -49,9 +49,10 @@ const SignupPage = () => {
   if (state.authenticated) navigate('/dashboard');
 
   return (
-    <section className="signin">
+    <section className="page-form">
       <form className="form" onSubmit={submitHandler}>
         <header className="form__header">
+          <h3 className="form__heading">Create your account</h3>
           {error ? (
             <div className="form__notification form__notification--error">
               An error occurred during your request, please try again.
@@ -60,12 +61,28 @@ const SignupPage = () => {
         </header>
 
         <fieldset className="form__field">
-          <Input name="email" type="text" error={fieldErrors.email} />
-          <Input name="username" type="text" error={fieldErrors.username} />
-          <Input name="password" type="password" error={fieldErrors.password} />
+          <Input
+            name="email"
+            type="text"
+            label="Email"
+            error={fieldErrors.email}
+          />
+          <Input
+            name="username"
+            type="text"
+            label="Username"
+            error={fieldErrors.username}
+          />
+          <Input
+            name="password"
+            type="password"
+            label="Password"
+            error={fieldErrors.password}
+          />
           <Input
             name="confirmPassword"
             type="password"
+            label="Confirm Password"
             error={fieldErrors.confirmPassword}
           />
         </fieldset>
