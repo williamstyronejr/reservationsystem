@@ -9,6 +9,8 @@ import SignupPage from './pages/auth/SignupPage';
 import RecoveryPage from './pages/auth/RecoveryPage';
 import LandingLayout from './layouts/LandingLayout';
 import MissingPage from './pages/MissingPage';
+import DashboardLayout from './layouts/DashboardLayout';
+import DashboardPage from './pages/dashboard/DashboardPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +47,13 @@ const LandingPages = [
   },
 ];
 
+const DashboardPages = [
+  {
+    path: '/dashboard',
+    component: <DashboardPage />,
+  },
+];
+
 const Root = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -56,6 +65,14 @@ const Root = () => (
                 key={elem.path}
                 path={elem.path}
                 element={<LandingLayout>{elem.component}</LandingLayout>}
+              />
+            ))}
+
+            {DashboardPages.map((elem) => (
+              <Route
+                key={elem.path}
+                path={elem.path}
+                element={<DashboardLayout>{elem.component}</DashboardLayout>}
               />
             ))}
 
