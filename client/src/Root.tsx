@@ -3,10 +3,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthProvider } from './context/auth';
 import HomePage from './pages/Homepage';
+import FeaturesPage from './pages/Features';
 import SigninPage from './pages/auth/SigninPage';
 import SignupPage from './pages/auth/SignupPage';
 import RecoveryPage from './pages/auth/RecoveryPage';
 import LandingLayout from './layouts/LandingLayout';
+import MissingPage from './pages/MissingPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +26,10 @@ const LandingPages = [
   {
     path: '/',
     component: <HomePage />,
+  },
+  {
+    path: '/features',
+    component: <FeaturesPage />,
   },
   {
     path: '/recovery',
@@ -52,6 +58,8 @@ const Root = () => (
                 element={<LandingLayout>{elem.component}</LandingLayout>}
               />
             ))}
+
+            <Route path="*" element={<MissingPage />} />
           </Routes>
         </BrowserRouter>
       </main>
