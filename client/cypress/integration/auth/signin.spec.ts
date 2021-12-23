@@ -21,7 +21,7 @@ describe('Signin page', () => {
 
   it('Empty fields should show error message', () => {
     cy.get('form').submit();
-    cy.get('[data-cy="error"]');
+    cy.get('[data-cy="notification-failure"]');
   });
 
   it('Incorrect value pair should show error message', () => {
@@ -30,7 +30,7 @@ describe('Signin page', () => {
     cy.get('[name="username"]').type(invalidUsername);
     cy.get('[name="password"]').type(password);
     cy.get('form').submit();
-    cy.get('[data-cy="error"]');
+    cy.get('[data-cy="notification-failure"]');
   });
 
   it('Correct value pair should redirect user to dashboard', () => {
