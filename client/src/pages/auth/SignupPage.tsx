@@ -25,14 +25,22 @@ const SignupPage = () => {
       password: string;
       confirmPassword: string;
     }) => {
-      const { data } = await axios('/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        data: { username, email, password, confirmPassword },
-      });
+      try {
+        const { data } = await axios('/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          data: { username, email, password, confirmPassword },
+        });
 
-      if (data.user) signin(data.user);
-      return data;
+        if (data.user) signin(data.user);
+        return data;
+      } catch (err: any) {
+        if (err.response && err.response.status === 400) {
+          return setFieldErrors(err.response.data.errors);
+        }
+
+        throw err;
+      }
     },
   );
 
