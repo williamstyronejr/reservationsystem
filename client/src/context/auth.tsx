@@ -41,13 +41,16 @@ function authReducer(state: State, action: { type: String; payload?: any }) {
 export const AuthProvider = (props: any) => {
   const [state, dispatch] = React.useReducer(authReducer, initState);
   const value = React.useMemo(() => ({ state, dispatch }), [state, dispatch]);
-  useQuery('csrf', async () => {
-    const res = await axios.get('/getCSRFToken');
-    const csrfToken = res.data.CSRFToken;
-    axios.defaults.headers.common['csrf-token'] = csrfToken;
+  const { data: token, isLoading: fetchingToken } = useQuery(
+    'csrf',
+    async () => {
+      const res = await axios.get('/getCSRFToken');
+      const csrfToken = res.data.CSRFToken;
+      axios.defaults.headers.common['csrf-token'] = csrfToken;
 
-    return res.data;
-  });
+      return res.data.CSRFToken;
+    },
+  );
 
   const {
     data: user,
@@ -59,7 +62,7 @@ export const AuthProvider = (props: any) => {
       const { data } = await axios.get('/session');
       return data;
     },
-    { retry: false, refetchOnMount: false },
+    { retry: false, refetchOnMount: false, enabled: !!token },
   );
 
   React.useEffect(() => {
@@ -71,7 +74,7 @@ export const AuthProvider = (props: any) => {
     }
   }, [user, error]);
 
-  if (isLoading) return <LoadingScreen />;
+  if (isLoading || fetchingToken) return <LoadingScreen />;
   return <AuthContext.Provider value={value} {...props} />;
 };
 
