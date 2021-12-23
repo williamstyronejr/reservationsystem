@@ -17,9 +17,9 @@ const HomePage = () => (
       </Link>
     </section>
 
-    <section className="features">
-      <header className="features__header">
-        <h3 className="features__heading">Header</h3>
+    <section className="promo">
+      <header className="promo__header">
+        <h3 className="promo__heading">Header</h3>
       </header>
     </section>
 

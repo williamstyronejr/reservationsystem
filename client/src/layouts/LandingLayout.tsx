@@ -34,14 +34,8 @@ const Header = () => {
           </li>
 
           <li className="header__item">
-            <Link to="/" className="header__link">
+            <Link to="/features" className="header__link">
               Features
-            </Link>
-          </li>
-
-          <li className="header__item">
-            <Link to="/" className="header__link">
-              Pricing
             </Link>
           </li>
 
