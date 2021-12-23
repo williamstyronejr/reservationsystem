@@ -15,18 +15,30 @@ const Input = ({
 
   return (
     <label className="form__label" htmlFor={`${name}-input`}>
-      {error ? <div className="form__fielderror">{error}</div> : null}
       <span className="form__labeling">{label}</span>
-      <input
-        id={`${name}-input`}
-        name={name}
-        className="form__input form__input--text"
-        type={type}
-        onChange={(evt) => {
-          setValue(evt.target.value);
-        }}
-        value={value}
-      />
+      {error ? (
+        <div className="form__fielderror" data-cy="input-error">
+          {error}
+        </div>
+      ) : null}
+      {type !== 'textarea' ? (
+        <input
+          id={`${name}-input`}
+          name={name}
+          className="form__input form__input--text"
+          type={type}
+          onChange={(evt) => {
+            setValue(evt.target.value);
+          }}
+          value={value}
+          placeholder={label}
+        />
+      ) : (
+        <textarea
+          className="form__input form__input--textarea"
+          placeholder={label}
+        />
+      )}
     </label>
   );
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Input from '../../components/Input';
 import { useAuthContext } from '../../context/auth';
 
@@ -32,7 +32,10 @@ const SigninPage = () => {
         <header className="form__header">
           <h3 className="form__heading">Signin to your account</h3>
           {error ? (
-            <div className="form__notification form__notification--error">
+            <div
+              className="form__notification form__notification--error"
+              data-cy="notification-failure"
+            >
               {(error as any).response.status === 401
                 ? 'Invalid username or password.'
                 : 'An error occurred during your request, please try again.'}
@@ -57,6 +60,10 @@ const SigninPage = () => {
         >
           Signin
         </button>
+
+        <Link className="form__link" to="/recovery" data-cy="recovery">
+          Forgot password
+        </Link>
       </form>
     </section>
   );
