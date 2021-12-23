@@ -1,10 +1,15 @@
 import * as React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/auth';
 import './styles/landing.css';
 
 const Header = () => {
   const [visible, setVisible] = React.useState(false);
+  const location = useLocation();
+
+  React.useEffect(() => {
+    setVisible(false);
+  }, [location.pathname]);
 
   return (
     <header className={`header ${visible ? 'header--active' : ''}`}>
@@ -41,14 +46,14 @@ const Header = () => {
           </li>
 
           <li className="header__item">
-            <Link to="/" className="header__link">
-              FAQs
+            <Link to="/signin" className="header__link">
+              Signin
             </Link>
           </li>
 
           <li className="header__item">
-            <Link to="/" className="header__link">
-              Contact
+            <Link to="/signup" className="header__link">
+              Signup
             </Link>
           </li>
         </ul>
@@ -67,89 +72,90 @@ const LandingLayout = ({ children }: { children: any }) => {
       <Header />
       {children}
       <footer className="footer">
-        <div className="footer__info">
-          <h3 className="footer__logo">
-            <Link className="footer__logo-link" to="/">
-              Reserve
-            </Link>
-          </h3>
-          <p className="footer__description">
-            Reserve makes it easy for stores of all sizes to have a fully
-            features reservation system.
-          </p>
+        <div className="footer__wrapper">
+          <div className="footer__info">
+            <h3 className="footer__logo">
+              <Link className="footer__logo-link" to="/">
+                Reserve
+              </Link>
+            </h3>
+            <p className="footer__description">
+              Reserve makes it easy for stores of all sizes to have a fully
+              features reservation system.
+            </p>
+          </div>
+          <div className="footer__links">
+            <ul className="footer__list">
+              <li className="footer__item footer__item--title">Company</li>
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>
+            </ul>
+            <ul className="footer__list">
+              <li className="footer__item footer__item--title">Support</li>
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>
+            </ul>
+            <ul className="footer__list">
+              <li className="footer__item footer__item--title">Discover</li>
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>{' '}
+              <li className="footer__item">
+                <Link className="footer__link" to="/">
+                  Home
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div className="footer__links">
-          <ul className="footer__list">
-            <li className="footer__item footer__item--title">Company</li>
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>
-          </ul>
-          <ul className="footer__list">
-            <li className="footer__item footer__item--title">Supprot</li>
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>
-          </ul>
-          <ul className="footer__list">
-            <li className="footer__item footer__item--title">Discover</li>
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>{' '}
-            <li className="footer__item">
-              <Link className="footer__link" to="/">
-                Home
-              </Link>
-            </li>
-          </ul>
-        </div>
-
         <p className="footer__copyright">© 2021 Reserve.</p>
       </footer>
     </>
