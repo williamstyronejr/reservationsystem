@@ -1,5 +1,6 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 import { createUser } from '../services/user';
 import { authenticateLocalSignin } from '../middlewares/auth';
 import { validateSignup, validateRecovery } from '../middlewares/validation';
@@ -45,15 +46,28 @@ router.post(
 
     try {
       const hash = await hashString(password);
-      const user = await createUser(username, email, hash);
+      const newUser = await createUser(username, email, hash);
 
-      res.json({
-        success: true,
-        user: {
-          id: user.id,
-          username: user.username,
-        },
-      });
+      passport.authenticate('local', {}, (err, user) => {
+        if (err) return next(err);
+        if (!user) {
+          // Test
+        }
+
+        req.logIn(user, (logErr) => {
+          if (logErr) {
+            return next(logErr);
+          }
+
+          res.json({
+            success: true,
+            user: {
+              id: newUser.id,
+              username: newUser.username,
+            },
+          });
+        });
+      })(req, res, next);
     } catch (err: any) {
       // Existing unique fields
       if (err.name && err.name === 'SequelizeUniqueConstraintError') {

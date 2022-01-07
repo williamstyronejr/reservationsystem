@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Request, Response, NextFunction } from 'express';
 
 export const authenticateLocalSignin = passport.authenticate('local', {});
+
 export const requireLocalSignin = (
   req: Request,
   res: Response,

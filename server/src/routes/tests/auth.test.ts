@@ -1,7 +1,7 @@
 import request from 'supertest';
 import startServer from '../../server';
 import { createRandomString } from '../../utils/utils';
-import getSession from './utils';
+import { getSession } from './utils';
 
 let server: any;
 let csrfToken: string;

@@ -43,6 +43,13 @@ const emailValidation = () => [
   body('email', 'Invalid email').exists().isEmail().normalizeEmail(),
 ];
 
+/**
+ * Validation rules for password or confirm password. If field is
+ *  confirmPassword, then it will be compared to the field 'password' to check
+ *  if they are equal.
+ * @param fieldName Name of field in req.body for password
+ * @returns Returns a express validator chain for validating password.
+ */
 const passwordValidation = (fieldName = 'password') => [
   body(fieldName, 'Invalid password')
     .exists()
@@ -61,5 +68,14 @@ export const validateSignup = [
   ...passwordValidation('confirmPassword'),
   checkValidation,
 ];
+
+export const validatePasswordUpdate = [
+  ...passwordValidation(''),
+  ...passwordValidation('oldPassword'),
+  ...passwordValidation('confirmPassword'),
+  checkValidation,
+];
+
+export const validateAccountUpdate = [];
 
 export const validateRecovery = [...emailValidation(), checkValidation];
