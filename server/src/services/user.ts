@@ -24,7 +24,7 @@ export function findUserById(
 }
 
 /**
- * Updates the users hash with a hash from the new password.
+ * Updates the user's hash with a hash from the new password.
  * @param id Id of user
  * @param newPassword New password to set
  * @returns Returns a promise to resolve with a user object.
@@ -33,4 +33,18 @@ export function updateUserPassword(id: number | string, newPassword: string) {
   return hashString(newPassword).then((hash) => {
     db.models.User.update({ hash }, { where: { id } });
   });
+}
+
+/**
+ * Updates an user by their id.
+ * @param id Id of user
+ * @param params Parameters to update.
+ * @returns Returns a promise to resolve with array containing the number of
+ *  fields updated and the user object.
+ */
+export function updateUserById(
+  id: number | string,
+  params: Record<string, string | number>,
+): Promise<[Number, Record<string, unknown>?]> {
+  return db.models.User.update(params, { where: { id }, returning: true });
 }
