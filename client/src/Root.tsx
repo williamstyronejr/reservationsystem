@@ -11,6 +11,7 @@ import LandingLayout from './layouts/LandingLayout';
 import MissingPage from './pages/MissingPage';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import SettingsPage from './pages/settings/SettingsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,6 +49,10 @@ const LandingPages = [
 ];
 
 const DashboardPages = [
+  {
+    path: '/settings',
+    component: <SettingsPage />,
+  },
   {
     path: '/dashboard',
     component: <DashboardPage />,
