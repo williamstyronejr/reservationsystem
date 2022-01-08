@@ -53,26 +53,36 @@ export const AuthProvider = (props: any) => {
   );
 
   const {
-    data: user,
+    // data: user,
     isLoading,
-    error,
+    // error,
   } = useQuery(
     '/session',
     async () => {
       const { data } = await axios.get('/session');
       return data;
     },
-    { retry: false, refetchOnMount: false, enabled: !!token },
+    {
+      retry: false,
+      refetchOnMount: false,
+      enabled: !!token,
+      onSuccess: (input) => {
+        dispatch({
+          type: 'LOGIN',
+          payload: input,
+        });
+      },
+    },
   );
 
-  React.useEffect(() => {
-    if (user) {
-      dispatch({
-        type: 'LOGIN',
-        payload: user,
-      });
-    }
-  }, [user, error]);
+  // React.useEffect(() => {
+  //   if (user) {
+  //     dispatch({
+  //       type: 'LOGIN',
+  //       payload: user,
+  //     });
+  //   }
+  // }, [user, error]);
 
   if (isLoading || fetchingToken) return <LoadingScreen />;
   return <AuthContext.Provider value={value} {...props} />;
