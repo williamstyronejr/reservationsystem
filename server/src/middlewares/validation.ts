@@ -76,6 +76,14 @@ export const validatePasswordUpdate = [
   checkValidation,
 ];
 
-export const validateAccountUpdate = [];
+export const validateAccountUpdate = [
+  body('username', 'Invalid username')
+    .optional()
+    .trim()
+    .isLength({ min: 4, max: 32 })
+    .withMessage('Username must be 4 to 32 characters'),
+  body('email', 'Invalid email').optional().isEmail().normalizeEmail(),
+  checkValidation,
+];
 
 export const validateRecovery = [...emailValidation(), checkValidation];
