@@ -1,12 +1,11 @@
 import * as React from 'react';
 import axios from 'axios';
 import { useMutation } from 'react-query';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Input from '../../components/Input';
 import { useAuthContext } from '../../context/auth';
 
 const SigninPage = () => {
-  const navigate = useNavigate();
   const { signin, state } = useAuthContext();
   const { error, isLoading, mutate } = useMutation(
     async ({ username, password }: { username: string; password: string }) => {
@@ -24,7 +23,7 @@ const SigninPage = () => {
     mutate(fields);
   }
 
-  if (state.authenticated) navigate('/dashboard');
+  if (state.authenticated) return <Navigate replace to="/dashboard" />;
 
   return (
     <section className="page-form">
