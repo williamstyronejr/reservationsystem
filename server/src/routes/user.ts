@@ -1,9 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { requireLocalSignin } from '../middlewares/auth';
-import { validatePasswordUpdate } from '../middlewares/validation';
+import {
+  validateAccountUpdate,
+  validatePasswordUpdate,
+} from '../middlewares/validation';
 import { compareHash } from '../utils/utils';
-import { updateUserPassword } from '../services/user';
+import { updateUserById, updateUserPassword } from '../services/user';
 
 const jsonParser = bodyParser.json({});
 const router = Router();
@@ -46,7 +49,47 @@ router.post(
       await updateUserPassword(id, password);
 
       res.json({ success: true });
-    } catch (err) {
+    } catch (err: any) {
+      next(err);
+    }
+  },
+);
+
+router.post(
+  '/settings/account',
+  jsonParser,
+  validateAccountUpdate,
+  requireLocalSignin,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, username } = req.body;
+    const { id } = req.user as any;
+
+    try {
+      const param: any = {};
+      if (email) param.email = email;
+      if (username) param.username = username;
+
+      await updateUserById(id, param);
+
+      res.json({ success: true });
+    } catch (err: any) {
+      if (err.name && err.name === 'SequelizeUniqueConstraintError') {
+        const errors: any = {};
+
+        if (err.fields) {
+          Object.keys(err.fields).forEach((field) => {
+            if (field === 'username')
+              errors.username = 'Username is already taken';
+            if (field === 'email') errors.email = 'Email is already taken';
+          });
+        }
+
+        if (Object.keys(errors).length > 0) {
+          err.msg = errors;
+          err.status = 400;
+          return next(err);
+        }
+      }
       next(err);
     }
   },
