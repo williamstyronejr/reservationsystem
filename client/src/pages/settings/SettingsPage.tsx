@@ -103,15 +103,20 @@ const PasswordForm = () => {
 const AccountForm = () => {
   const [errors, setErrors] = React.useState<Record<string, string>>({});
 
-  const { isLoading, mutate } = useMutation(
+  const {
+    isLoading,
+    mutate,
+    data: success,
+    error,
+  } = useMutation(
     async ({ username, email }: { username: string; email: string }) => {
       try {
-        const { data } = await axios.post('/settings/account', {
+        await axios.post('/settings/account', {
           username,
           email,
         });
 
-        return data;
+        return true;
       } catch (err: any) {
         if (err.response && err.response.status === 400) {
           return setErrors(err.response.data.errors);
@@ -127,13 +132,30 @@ const AccountForm = () => {
     setErrors({});
     const formData = new FormData(evt.currentTarget);
     const fields: any = Object.fromEntries(formData.entries());
-    mutate(fields);
+    const inputs: any = {};
+    if (fields.username !== '') inputs.username = fields.username;
+    if (fields.email !== '') inputs.email = fields.email;
+
+    if (Object.keys(inputs).length === 0) return;
+    mutate(inputs);
   };
 
   return (
     <form className="form" onSubmit={submitHandler}>
       <header className="form__header">
         <h3 className="form__heading">Account</h3>
+
+        {error ? (
+          <div className="form__notification form__notification--failure">
+            An error occurred, pleasee try agin.
+          </div>
+        ) : null}
+
+        {success ? (
+          <div className="form__notification form__notification--success">
+            Account has been updated.
+          </div>
+        ) : null}
       </header>
 
       <fieldset className="form__field">
