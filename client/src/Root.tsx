@@ -62,7 +62,7 @@ const DashboardPages = [
 const Root = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <main className="page__main">
+      <main className="main">
         <BrowserRouter>
           <Routes>
             {LandingPages.map((elem) => (

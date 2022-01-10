@@ -5,13 +5,13 @@ import LoadingScreen from '../components/LoadingScreen';
 
 interface State {
   id: number | null;
-  username: string | null;
+  username: string;
   authenticated: boolean;
 }
 
 const initState: State = {
   id: null,
-  username: null,
+  username: '',
   authenticated: false,
 };
 
