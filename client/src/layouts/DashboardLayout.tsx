@@ -3,8 +3,15 @@ import { Link, useLocation, Navigate } from 'react-router-dom';
 import { useAuthContext } from '../context/auth';
 import './styles/dashboard.css';
 
-const Header = () => {
+const Header = ({
+  signout,
+  username,
+}: {
+  signout: Function;
+  username: string;
+}) => {
   const [visible, setVisible] = React.useState(false);
+  const [asideVisible, setAsideVisible] = React.useState(true);
   const location = useLocation();
 
   React.useEffect(() => {
@@ -12,58 +19,70 @@ const Header = () => {
   }, [location.pathname]);
 
   return (
-    <header className={`header ${visible ? 'header--active' : ''}`}>
-      <h1 className="header__logo">Reserve</h1>
+    <>
+      <aside className={`aside ${asideVisible ? 'aside--active' : ''}`}>
+        aside
+      </aside>
 
-      <button
-        className="header__toggle"
-        type="button"
-        onClick={() => setVisible(!visible)}
-      >
-        <span className="header__bar header__bar--1" />
-        <span className="header__bar header__bar--2" />
-        <span className="header__bar header__bar--3" />
-      </button>
+      <header className={`header ${visible ? 'header--active' : ''}`}>
+        <button
+          className=""
+          type="button"
+          onClick={() => setAsideVisible(!asideVisible)}
+        >
+          three
+        </button>
 
-      <nav className="header__nav">
-        <ul className="header__list">
-          <li className="header__item">
-            <Link to="/" className="header__link">
-              Home
-            </Link>
-          </li>
+        <h1 className="header__logo">Reserve</h1>
 
-          <li className="header__item">
-            <Link to="/features" className="header__link">
-              Features
-            </Link>
-          </li>
+        <button
+          className="header__toggle"
+          type="button"
+          onClick={() => setVisible(!visible)}
+        >
+          <span className="header__bar header__bar--1" />
+          <span className="header__bar header__bar--2" />
+          <span className="header__bar header__bar--3" />
+        </button>
 
-          <li className="header__item">
-            <Link to="/signin" className="header__link">
-              Signin
-            </Link>
-          </li>
+        <nav className="header__nav">
+          <ul className="header__list">
+            <li className="header__item">
+              <Link to="/" className="header__link">
+                Home
+              </Link>
+            </li>
 
-          <li className="header__item">
-            <Link to="/signup" className="header__link">
-              Signup
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+            <li className="header__item">
+              <Link to="/features" className="header__link">
+                Features
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="">
+          <div>{username}</div>
+
+          <div className="">
+            <button className="" type="button" onClick={() => signout()}>
+              Signout
+            </button>
+          </div>
+        </div>
+      </header>
+    </>
   );
 };
 
 const DashboardLayout = ({ children }: { children: any }) => {
-  const { state } = useAuthContext();
+  const { state, signout } = useAuthContext();
 
   if (!state.authenticated) return <Navigate replace to="/signin" />;
 
   return (
     <div className="dashboard-wrapper">
-      <Header />
+      <Header signout={signout} username={state.username} />
 
       {children}
     </div>
