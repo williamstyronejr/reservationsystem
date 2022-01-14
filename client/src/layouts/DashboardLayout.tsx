@@ -12,59 +12,90 @@ const Header = ({
 }) => {
   const [visible, setVisible] = React.useState(false);
   const [asideVisible, setAsideVisible] = React.useState(true);
+  const [userMenuVisible, setUserMenuVisible] = React.useState(false);
   const location = useLocation();
 
   React.useEffect(() => {
     setVisible(false);
   }, [location.pathname]);
 
+  const testList = [
+    {
+      id: '123',
+      name: 'store name 1',
+    },
+    {
+      id: '1234',
+      name: 'store name 2',
+    },
+  ];
+
   return (
     <>
       <aside className={`aside ${asideVisible ? 'aside--active' : ''}`}>
         aside
+        <nav className="aside__nav">
+          <ul className="aside__list">
+            <li className="aside__item">
+              <Link className="aside__link" to="/dashboard/analytics">
+                Analytics
+              </Link>
+            </li>
+          </ul>
+
+          <ul className="aside__list aside__list--scrollable">
+            <li className="aside__item aside__item--heading">Stores</li>
+            <li className="aside__item aside__item--special">
+              <Link className="aside__link" to="/dashboard/stores/create">
+                Add Store
+              </Link>
+            </li>
+
+            {testList.map((store: any) => (
+              <li className="aside__item">
+                <Link
+                  to={`/dashboard/stores/${store.id}`}
+                  className="aside__link"
+                >
+                  {store.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </aside>
 
-      <header className={`header ${visible ? 'header--active' : ''}`}>
-        <button
-          className=""
-          type="button"
-          onClick={() => setAsideVisible(!asideVisible)}
-        >
-          three
-        </button>
-
-        <h1 className="header__logo">Reserve</h1>
-
+      <header
+        className={`header header--dashboard ${
+          visible ? 'header--active' : ''
+        }`}
+      >
         <button
           className="header__toggle"
           type="button"
-          onClick={() => setVisible(!visible)}
+          onClick={() => setAsideVisible(!asideVisible)}
         >
           <span className="header__bar header__bar--1" />
           <span className="header__bar header__bar--2" />
           <span className="header__bar header__bar--3" />
         </button>
 
-        <nav className="header__nav">
-          <ul className="header__list">
-            <li className="header__item">
-              <Link to="/" className="header__link">
-                Home
-              </Link>
-            </li>
+        <div
+          className={`header__user ${
+            userMenuVisible ? 'header__user--active' : ''
+          }`}
+        >
+          <div className="header__menu-toggle">
+            <button
+              className=""
+              type="button"
+              onClick={() => setUserMenuVisible(!userMenuVisible)}
+            >
+              {username}
+            </button>
+          </div>
 
-            <li className="header__item">
-              <Link to="/features" className="header__link">
-                Features
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        <div className="">
-          <div>{username}</div>
-
-          <div className="">
+          <div className="header__dropdown">
             <button className="" type="button" onClick={() => signout()}>
               Signout
             </button>

@@ -16,9 +16,43 @@
   width: 150px;
 }
 
+.aside__nav {
+}
+
+.aside__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.aside__link {
+  text-decoration: none;
+  color: var(--color-link);
+}
+
+.aside__link:hover {
+  color: var(--color-link-hover);
+}
+
 .header {
   background-color: red;
   width: 100%;
+}
+
+.header--dashboard {
+  display: flex;
+}
+
+.header__user {
+  position: relative;
+}
+
+.header__dropdown {
+  display: none;
+}
+
+.header__user--active .header__dropdown {
+  display: block;
 }
 
 @media only screen and (min-width: 600px) {
