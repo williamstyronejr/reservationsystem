@@ -3,6 +3,38 @@ import { Link, useLocation, Navigate } from 'react-router-dom';
 import { useAuthContext } from '../context/auth';
 import './styles/dashboard.css';
 
+const SearchBar = () => {
+  const [visible, setVisible] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+
+  return (
+    <div
+      className={`header__search ${visible ? 'header__search--active' : ''}`}
+    >
+      <button
+        className="header__search-toggle"
+        type="button"
+        onClick={() => setVisible(!visible)}
+      >
+        <i className="fas fa-search" />
+      </button>
+
+      <input
+        type="text"
+        className="header__search-bar"
+        value={search}
+        onChange={(evt: any) => setSearch(evt.target.value)}
+        onKeyUp={(evt: any) => {
+          if (evt.key === 'Enter') {
+            console.log('testing');
+            //
+          }
+        }}
+      />
+    </div>
+  );
+};
+
 const Header = ({
   signout,
   username,
@@ -10,13 +42,11 @@ const Header = ({
   signout: Function;
   username: string;
 }) => {
-  const [visible, setVisible] = React.useState(false);
-  const [asideVisible, setAsideVisible] = React.useState(true);
-  const [userMenuVisible, setUserMenuVisible] = React.useState(false);
+  const [activeMenu, setActiveMenu] = React.useState('');
   const location = useLocation();
 
   React.useEffect(() => {
-    setVisible(false);
+    setActiveMenu('');
   }, [location.pathname]);
 
   const testList = [
@@ -30,10 +60,27 @@ const Header = ({
     },
   ];
 
+  const testNotifications = [
+    {
+      id: '123',
+      type: 'message',
+      msg: 'Wow Thanks',
+      author: 'Username',
+      image: '/',
+    },
+    {
+      id: '12344',
+      type: 'like',
+      author: 'Person 1',
+      image: '/',
+    },
+  ];
+
   return (
     <>
-      <aside className={`aside ${asideVisible ? 'aside--active' : ''}`}>
-        aside
+      <aside
+        className={`aside ${activeMenu === 'aside' ? 'aside--active' : ''}`}
+      >
         <nav className="aside__nav">
           <ul className="aside__list">
             <li className="aside__item">
@@ -52,7 +99,7 @@ const Header = ({
             </li>
 
             {testList.map((store: any) => (
-              <li className="aside__item">
+              <li className="aside__item" key={`store-header-${store.id}`}>
                 <Link
                   to={`/dashboard/stores/${store.id}`}
                   className="aside__link"
@@ -67,37 +114,96 @@ const Header = ({
 
       <header
         className={`header header--dashboard ${
-          visible ? 'header--active' : ''
+          activeMenu === 'aside' ? 'header--active' : ''
         }`}
       >
         <button
           className="header__toggle"
           type="button"
-          onClick={() => setAsideVisible(!asideVisible)}
+          onClick={() => setActiveMenu(activeMenu === 'aside' ? '' : 'aside')}
         >
           <span className="header__bar header__bar--1" />
           <span className="header__bar header__bar--2" />
           <span className="header__bar header__bar--3" />
         </button>
 
+        <SearchBar />
+
         <div
-          className={`header__user ${
-            userMenuVisible ? 'header__user--active' : ''
+          className={`header__notification ${
+            activeMenu === 'notif' ? 'header__notification--active' : ''
           }`}
         >
           <div className="header__menu-toggle">
             <button
-              className=""
+              className="header__notification-toggle"
               type="button"
-              onClick={() => setUserMenuVisible(!userMenuVisible)}
+              aria-label="Notifications"
+              onClick={() =>
+                setActiveMenu(activeMenu === 'notif' ? '' : 'notif')
+              }
+            >
+              <i className="far fa-bell" />
+            </button>
+          </div>{' '}
+          <div className="header__dropdown">
+            <ul className="header__notification-list">
+              {testNotifications.map((notification: any) => (
+                <li
+                  className="header__notification-item"
+                  key={`header-notification-${notification.id}`}
+                >
+                  <img
+                    className="header__notification-img"
+                    alt="Profile"
+                    src={notification.image}
+                  />
+                  <div className="header__notification-details">
+                    <h4 className="header__notification-heading">
+                      Headingjjjjjjjjjjjjjjfffffjjjjjjjjjjjjjjfffff
+                    </h4>
+                    <p className="header__notification-message">
+                      Mshhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhvhvhvvg
+                    </p>
+                    <div className="header__notification-date">5 Hours ago</div>
+                  </div>
+                </li>
+              ))}
+
+              <li className="header__notification-item header__notification-item--end">
+                <Link
+                  className="header__notification-all"
+                  to="/dashboard/notifications"
+                >
+                  View All
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          className={`header__user ${
+            activeMenu === 'user' ? 'header__user--active' : ''
+          }`}
+        >
+          <div className="header__menu-toggle">
+            <button
+              className="header__user-toggle"
+              type="button"
+              onClick={() => setActiveMenu(activeMenu === 'user' ? '' : 'user')}
             >
               {username}
             </button>
           </div>
 
           <div className="header__dropdown">
-            <button className="" type="button" onClick={() => signout()}>
-              Signout
+            <button
+              className="header__user-link"
+              type="button"
+              onClick={() => signout()}
+            >
+              Logout
             </button>
           </div>
         </div>
