@@ -1,10 +1,3 @@
-.dashboard-wrapper {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  flex-flow: column wrap;
-}
-
 .aside {
   display: none;
   background-color: pink;
@@ -34,6 +27,10 @@
 
 .aside__link:hover {
   color: var(--color-link-hover);
+}
+
+.dashboard-content {
+  margin: 0;
 }
 
 .header {
@@ -193,4 +190,40 @@
 }
 
 @media only screen and (min-width: 600px) {
+  .dashboard-wrapper {
+    flex-flow: row wrap;
+  }
+
+  .aside {
+    display: block;
+    margin: 0;
+    width: 50px;
+    flex: 0 0 auto;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .aside--active {
+    width: 150px;
+  }
+
+  .dashboard--content {
+    padding-left: 60px;
+  }
+
+  .header--dashboard {
+    flex: 1 0 auto;
+    max-width: 100%;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
+
+  .dashboard {
+    flex: 1 0 auto;
+    margin-top: 60px;
+  }
+
+  .header--dashboard .header__toggle {
+    display: block;
+  }
 }
