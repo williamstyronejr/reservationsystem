@@ -9,9 +9,15 @@ import SignupPage from './pages/auth/SignupPage';
 import RecoveryPage from './pages/auth/RecoveryPage';
 import LandingLayout from './layouts/LandingLayout';
 import MissingPage from './pages/MissingPage';
+import StoresPage from './pages/dashboard/stores/index';
+import CreateStorePage from './pages/dashboard/stores/create';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import StorePage from './pages/dashboard/stores/StorePage';
+import AnalyticsPage from './pages/dashboard/analytics';
+import CalendarPage from './pages/dashboard/calendar';
 import SettingsPage from './pages/settings/SettingsPage';
+import ManageLayoutPage from './pages/dashboard/stores/ManageLayoutPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,6 +62,30 @@ const DashboardPages = [
   {
     path: '/dashboard',
     component: <DashboardPage />,
+  },
+  {
+    path: '/dashboard/stores',
+    component: <StoresPage />,
+  },
+  {
+    path: '/dashboard/stores/create',
+    component: <CreateStorePage />,
+  },
+  {
+    path: '/dashboard/analytics',
+    component: <AnalyticsPage />,
+  },
+  {
+    path: '/dashboard/calendar',
+    component: <CalendarPage />,
+  },
+  {
+    path: '/dashboard/stores/:storeId',
+    component: <StorePage />,
+  },
+  {
+    path: '/dashboard/stores/:storeId/layout',
+    component: <ManageLayoutPage />,
   },
 ];
 
