@@ -10,9 +10,13 @@
   --color-link: #000000;
   --color-link-hover: #0c0c0c;
   --color-link-active: #0c0c0c;
+  --color-link-off: #8391a2;
+  --color-link-off-hover: #787f87;
   --color-confirm: #0acf97;
   --color-confirm-darken: #09b080;
   --color-disabled: #101010;
+  --color-background: #fafbfe;
+  --color-menu-hover: #f4f6fb;
 }
 
 html,
