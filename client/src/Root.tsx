@@ -14,10 +14,12 @@ import CreateStorePage from './pages/dashboard/stores/create';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import StorePage from './pages/dashboard/stores/StorePage';
+import StoreFrontPage from './pages/stores/StorePage';
 import AnalyticsPage from './pages/dashboard/analytics';
 import CalendarPage from './pages/dashboard/calendar';
 import SettingsPage from './pages/settings/SettingsPage';
 import ManageLayoutPage from './pages/dashboard/stores/ManageLayoutPage';
+import ReviewsPage from './pages/stores/ReviewPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +53,14 @@ const LandingPages = [
   {
     path: '/signin',
     component: <SigninPage />,
+  },
+  {
+    path: '/stores/:storeId',
+    component: <StoreFrontPage />,
+  },
+  {
+    path: '/stores/:storeId/reviews',
+    component: <ReviewsPage />,
   },
 ];
 
