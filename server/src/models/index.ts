@@ -1,5 +1,6 @@
 import { Sequelize, Options } from 'sequelize';
 import User from './User';
+import Store from './Store';
 
 const { DATABASE_URL } = process.env;
 
@@ -9,6 +10,7 @@ const sequelize = new Sequelize(DATABASE_URL || '', options);
 
 const models: any = {
   User: User(sequelize),
+  Store: Store(sequelize),
 };
 
 Object.keys(models).forEach((key) => {
