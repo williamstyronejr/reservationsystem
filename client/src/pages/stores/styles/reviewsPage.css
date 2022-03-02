@@ -1,0 +1,38 @@
+.reviews__heading {
+  font-size: 2rem;
+  padding: 0 10px;
+}
+
+.reviews__list {
+  display: flex;
+  flex-flow: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reviews__item {
+  border-bottom: 1px solid black;
+  padding: 5px 10px;
+}
+
+.reviews__username {
+  font-size: 1.75rem;
+}
+
+.reviews__message {
+  font-size: 1.5rem;
+}
+
+@media only screen and (min-width: 600px) {
+  .reviews__list {
+    flex-flow: row wrap;
+  }
+
+  .reviews__item {
+    width: 200px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+}

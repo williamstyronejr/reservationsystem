@@ -1,0 +1,137 @@
+.store {
+}
+
+.store__header {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.store__background {
+  display: block;
+  width: 100%;
+  height: 250px;
+  background-color: blue;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.store__icon {
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: red;
+  margin-top: -20px;
+  margin-left: 20px;
+  object-fit: contain;
+  object-position: 50% 50%;
+}
+
+.store__wrapper {
+  position: relative;
+}
+
+.store__heading {
+  font-size: 3.2rem;
+  margin: 10px 0 5px 0;
+}
+
+.store__toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #2e2e2e;
+}
+
+.store__info {
+  font-size: 1.5rem;
+  color: var(--color-subtle);
+}
+
+.store__info-dividor {
+  margin: 0 5px;
+  font-size: 0.5rem;
+  vertical-align: middle;
+}
+
+.store__info-tags {
+  vertical-align: middle;
+}
+
+.store__info-ratings {
+  vertical-align: middle;
+}
+
+.store__reviews {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-top: 15px;
+}
+
+.store__view-more {
+  position: absolute;
+  right: 0;
+  background-color: #efefef;
+  text-decoration: none;
+  color: black;
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-top: -5px;
+}
+
+.store__view-more:hover {
+  background-color: #cacaca;
+}
+
+.store__reviews-heading {
+  font-size: 1.75rem;
+  margin: 0 0 15px 0;
+}
+
+.store__reviews-list {
+  display: flex;
+  flex-flow: row nowrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto hidden;
+}
+
+.store__reviews-item {
+  width: 300px;
+  margin-left: 10px;
+  flex: 0 0 auto;
+}
+
+.store__reviews-toggle {
+  text-align: left;
+  background-color: transparent;
+  padding: 12px 13px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #e7e7e7;
+  margin-bottom: 10px;
+}
+
+.store__reviews-toggle:hover {
+  border-color: #d6d6d6;
+}
+
+.store__reviews-user {
+  font-size: 1.5rem;
+}
+
+.store__reviews-message {
+  font-size: 1.5rem;
+}
+
+.store__subheading {
+  font-size: 1.6rem;
+}
+
+.store__datepicker {
+}

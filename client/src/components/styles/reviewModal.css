@@ -1,0 +1,21 @@
+.modal__review-heading {
+  font-size: 3.2rem;
+  margin: 10px 0;
+}
+
+.modal__review-message {
+  font-size: 1.75rem;
+}
+
+.modal__review-toggle {
+  display: block;
+  float: right;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  border: none;
+  padding: 7px 20px;
+}
+
+.modal__review-toggle:hover {
+  background-color: #cacaca;
+}
