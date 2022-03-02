@@ -866,6 +866,9 @@ const Reservation = ({
 
           {actionVisible ? (
             <div className="store__reservation-dropdown">
+              <Link className="store__reservation-action" to={`/stores/${1}`}>
+                Store Page
+              </Link>
               <button className="store__reservation-action" type="button">
                 <div className="store__reservation-text">Delete</div>
               </button>
