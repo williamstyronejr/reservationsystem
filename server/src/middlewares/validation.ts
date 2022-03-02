@@ -87,3 +87,12 @@ export const validateAccountUpdate = [
 ];
 
 export const validateRecovery = [...emailValidation(), checkValidation];
+
+export const validateStore = [
+  body('name', 'Invalid store name')
+    .exists()
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Must provide store name'),
+  checkValidation,
+];
