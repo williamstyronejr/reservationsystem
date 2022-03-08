@@ -1,59 +1,33 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
 import ReviewModal from '../../components/ReviewModal';
 import Modal from '../../components/Modal';
 import 'react-datepicker/dist/react-datepicker.css';
 import './styles/storePage.css';
 import StoreLayout from '../../components/StoreLayout';
+import LoadingScreen from '../../components/LoadingScreen';
+
+const NoStoreFound = () => (
+  <section className="store store--missing">Store not found</section>
+);
 
 const StorePage = () => {
   const [selectedReview, setSelectedReview] = React.useState<any>(null);
   const [detailVisible, setDetailVisible] = React.useState<boolean>(false);
   const [dateTime, setDateTime] = React.useState(new Date());
+  const { storeId } = useParams();
 
-  const store = {
-    id: '123',
-    name: 'Store Name',
-    headerImage: '/image/header/dafault.jpg',
-    storeIcon: '/image/icon/dafault.jpg',
-    tags: 'Pizza, Subs, Beer',
-    location: '102 Cross Road',
-    avgRating: 4.5,
-    phone: 5555555555,
-    reviews: [
-      {
-        id: '123',
-        username: 'Username',
-        message: 'Test Message',
-      },
-      {
-        id: '123',
-        username: 'Username',
-        message: 'Test Message',
-      },
-      {
-        id: '123',
-        username: 'Username',
-        message: 'Test Message',
-      },
-      {
-        id: '123',
-        username: 'Username',
-        message: 'Test Message',
-      },
-      {
-        id: '123',
-        username: 'Username',
-        message: 'Test Message',
-      },
-      {
-        id: '123',
-        username: 'Username',
-        message: 'Test Message',
-      },
-    ],
-  };
+  const { isLoading, data: store } = useQuery('/stores', async () => {
+    const { data } = await axios.get(`/store/${storeId}`);
+
+    return Object.keys(data).length === 0 ? null : data;
+  });
+
+  if (!store) return <NoStoreFound />;
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <section className="store">
@@ -116,7 +90,7 @@ const StorePage = () => {
 
         <ul className="store__reviews-list">
           {store.reviews.map((review: any) => (
-            <li className="store__reviews-item">
+            <li className="store__reviews-item" key={`review-${review.id}`}>
               <button
                 className="store__reviews-toggle"
                 type="button"
