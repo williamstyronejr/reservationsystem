@@ -17,6 +17,7 @@ export default (sequelize: Sequelize): any => {
   class Store extends Model<StoreAttributes, StoreCreationAttributes> {
     static associate(models: Record<string, any>) {
       Store.belongsTo(models.User, { foreignKey: 'manager' });
+      Store.hasMany(models.Review);
     }
   }
 
