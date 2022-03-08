@@ -23,3 +23,13 @@ export function createStore(
 }
 
 export function deleteStore(): any {}
+
+export function getStoreWithComments(storeId: string): any {
+  return db.models.Store.findByPk(storeId, {
+    include: [
+      {
+        model: db.models.Review,
+      },
+    ],
+  });
+}
