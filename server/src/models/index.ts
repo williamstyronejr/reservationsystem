@@ -1,6 +1,7 @@
 import { Sequelize, Options } from 'sequelize';
 import User from './User';
 import Store from './Store';
+import Review from './Review';
 
 const { DATABASE_URL } = process.env;
 
@@ -9,6 +10,7 @@ const options: Options = {};
 const sequelize = new Sequelize(DATABASE_URL || '', options);
 
 const models: any = {
+  Review: Review(sequelize),
   User: User(sequelize),
   Store: Store(sequelize),
 };
