@@ -1,6 +1,13 @@
 .store {
 }
 
+.store--missing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .store__header {
   display: block;
   width: 100%;
