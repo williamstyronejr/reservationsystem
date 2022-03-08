@@ -2,14 +2,26 @@ import bodyParser from 'body-parser';
 import { Router, Request, Response, NextFunction } from 'express';
 import { requireLocalSignin } from '../middlewares/auth';
 import { validateStore } from '../middlewares/validation';
-import { createStore } from '../services/store';
+import { createStore, getStoreWithComments } from '../services/store';
 
 const jsonParser = bodyParser.json({});
 const router = Router();
 
 router.get(
   '/store/:storeId',
-  async (req: Request, res: Response, next: NextFunction) => {},
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { storeId } = req.params;
+
+    try {
+      const store = await getStoreWithComments(storeId);
+
+      if (!store) return res.json({});
+
+      return res.json({ ...store.dataValues });
+    } catch (err) {
+      next(err);
+    }
+  },
 );
 
 router.get(
@@ -19,7 +31,11 @@ router.get(
     const { id } = req.user as any;
 
     try {
-      //
+      const store = await getStoreWithComments(storeId);
+
+      if (!store) return res.json({});
+
+      return res.json({ ...store.datavalues });
     } catch (err) {
       next(err);
     }
