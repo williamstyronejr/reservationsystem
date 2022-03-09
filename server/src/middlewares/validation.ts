@@ -96,3 +96,15 @@ export const validateStore = [
     .withMessage('Must provide store name'),
   checkValidation,
 ];
+
+/**
+ * Validate rules for a user review for a store
+ */
+export const validateReview = [
+  body('rating', 'Invalid rating'),
+  body('message', 'Invalid message')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Review must be no longer than 500 characters.'),
+];
