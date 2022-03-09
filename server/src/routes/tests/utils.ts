@@ -27,6 +27,15 @@ export async function getSession(
   return [res.body.CSRFToken, res.header['set-cookie'][0]];
 }
 
+/**
+ * Sends a request to server to signup a user.
+ * @param request Supertest request object
+ * @param server Http server to run test on
+ * @param csrfToken CSRF Token for request
+ * @param cookie Cookie for request
+ * @param params Object containing inputs for user signup
+ * @returns Returns a promise to resolve with request response.
+ */
 export async function signupUser(
   request: any,
   server: any,
@@ -42,6 +51,38 @@ export async function signupUser(
   await request(server)
     .post('/signup')
     .send(params)
+    .set('Cookie', cookie)
+    .set('csrf-token', csrfToken)
+    .expect(200);
+}
+
+/**
+ * Sends a request to create a store.
+ * @param request Supertest request object
+ * @param server Http server to run test on
+ * @param csrfToken CSRF Token for request
+ * @param cookie Cookie for request
+ * @param data Object containing data for store creation.
+ * @returns Returns a promise to resolve with request response.
+ */
+export async function createStore(
+  request: any,
+  server: any,
+  csrfToken: string,
+  cookie: string,
+  data: {
+    name: string;
+    location: string;
+    phone: string;
+    tags: string;
+    isPublic?: boolean;
+    icon?: string;
+    headerImage?: string;
+  },
+): Promise<any> {
+  return request(server)
+    .post('/store/create')
+    .send(data)
     .set('Cookie', cookie)
     .set('csrf-token', csrfToken)
     .expect(200);
