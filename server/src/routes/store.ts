@@ -1,8 +1,9 @@
 import bodyParser from 'body-parser';
 import { Router, Request, Response, NextFunction } from 'express';
 import { requireLocalSignin } from '../middlewares/auth';
-import { validateStore } from '../middlewares/validation';
+import { validateReview, validateStore } from '../middlewares/validation';
 import { createStore, getStoreWithComments } from '../services/store';
+import { createReview } from '../services/review';
 
 const jsonParser = bodyParser.json({});
 const router = Router();
@@ -66,6 +67,26 @@ router.post(
     } catch (err: any) {
       console.log(Object.keys(err));
       console.log(err.name);
+      next(err);
+    }
+  },
+);
+
+router.post(
+  '/store/:storeId/review/create',
+  jsonParser,
+  requireLocalSignin,
+  validateReview,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { message, rating } = req.body;
+    const { id } = req.user as any;
+    const { storeId } = req.params;
+
+    try {
+      const review = await createReview(rating, message, id, storeId);
+
+      return res.json({ review: review.dataValues });
+    } catch (err) {
       next(err);
     }
   },
