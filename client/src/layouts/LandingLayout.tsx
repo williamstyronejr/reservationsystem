@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Navigate, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/auth';
 import './styles/landing.css';
 
@@ -58,8 +58,9 @@ const Header = () => {
 
 const LandingLayout = ({ children }: { children: any }) => {
   const { state } = useAuthContext();
-  if (state.authenticated) return <Navigate replace to="/dashboard" />;
-
+  if (state.authenticated) {
+    // return <Navigate replace to="/dashboard" />;
+  }
   return (
     <>
       <Header />
