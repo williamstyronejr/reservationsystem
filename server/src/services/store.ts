@@ -6,7 +6,7 @@ export function createStore(
   location: string,
   tags: string,
   phone: string,
-  isPublic = true,
+  isPublic = false,
   headerImage = 'defaultHeader.jpg',
   icon = 'defaultIcon.jpg',
 ): Promise<any> {
