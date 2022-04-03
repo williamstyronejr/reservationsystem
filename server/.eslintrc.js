@@ -17,5 +17,6 @@ module.exports = {
     'consistent-return': 0,
     'no-unused-vars': 1,
     '@typescript-eslint/no-unused-vars': 1,
+    'import/prefer-default-export': 0,
   },
 };
