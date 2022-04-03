@@ -1,3 +1,4 @@
+import path from 'path';
 import request from 'supertest';
 import startServer from '../../server';
 import { createRandomString } from '../../utils/utils';
@@ -140,5 +141,48 @@ describe('/POST /settings/account', () => {
       .set('csrf-token', csrfToken)
       .send({ email: newEmail, username: newUsername })
       .expect(200);
+  });
+});
+
+describe('POST /settings/account/profile', () => {
+  const routeToTest = () => `/settings/account/profile`;
+
+  test('Removing default image should return 200 with failed success', async () => {
+    const res = await request(server)
+      .post(routeToTest())
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .type('form')
+      .field('remove', true)
+      .expect(200);
+
+    expect(res.body.success).toBeFalsy();
+  });
+
+  test('Valid file upload should response 200 with file url', async () => {
+    const testFileLoc = path.join(__dirname, 'profileTest.jpeg');
+
+    const res = await request(server)
+      .post(routeToTest())
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .type('form')
+      .attach('profile', testFileLoc)
+      .expect(200);
+
+    expect(res.body.success).toBeTruthy();
+    expect(res.body.profileImage).toBeDefined();
+  });
+
+  test('Removing a uploaded image should return 200 with success', async () => {
+    const res = await request(server)
+      .post(routeToTest())
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .type('form')
+      .field('remove', true)
+      .expect(200);
+
+    expect(res.body.success).toBeTruthy();
   });
 });

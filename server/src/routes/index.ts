@@ -62,8 +62,10 @@ export default function setupRoutes(app: Application) {
             break;
           default:
             res
-              .status(500)
-              .send('An error occurred on the server, please try again.');
+              .status(err.status || 500)
+              .send(
+                err.msg || 'An error occurred on the server, please try again.',
+              );
         }
         return;
       }

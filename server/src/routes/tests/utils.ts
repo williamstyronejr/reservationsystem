@@ -80,10 +80,33 @@ export async function createStore(
     headerImage?: string;
   },
 ): Promise<any> {
-  return request(server)
+  const res = await request(server)
     .post('/store/create')
     .send(data)
     .set('Cookie', cookie)
     .set('csrf-token', csrfToken)
     .expect(200);
+
+  return res.statusCode !== 200 ? null : res.body;
+}
+
+export async function createReview(
+  request: any,
+  server: any,
+  csrfToken: string,
+  cookie: string,
+  storeId: string,
+  data: {
+    rating: string;
+    message: string;
+  },
+): Promise<any> {
+  const res = await request(server)
+    .post(`/store/${storeId}/review/create`)
+    .set('csrf-token', csrfToken)
+    .set('Cookie', cookie)
+    .send(data)
+    .expect(200);
+
+  return res.statusCode !== 200 ? null : res.body.review;
 }

@@ -97,6 +97,8 @@ export const validateStore = [
   checkValidation,
 ];
 
+export const validateStoreUpdate = [checkValidation];
+
 /**
  * Validate rules for a user review for a store
  */

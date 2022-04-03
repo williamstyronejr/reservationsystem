@@ -1,6 +1,7 @@
 import http from 'http';
 import logger from './services/logger';
 import db from './models/index';
+import { initDefaults } from './services/firebase';
 import app from './services/app';
 import { setupRedis, closeRedis } from './services/redis';
 
@@ -53,7 +54,7 @@ export default async function startServer(
 ): Promise<ServerAsync> {
   const httpServer: ServerAsync = http.createServer(app);
 
-  await db.sequelize.sync({ force: false });
+  await db.sequelize.sync({ force: true });
   await setupRedis(REDIS_HOST, parseInt(REDIS_PORT as string, 10), REDIS_URL);
 
   await new Promise<void>((res) => {
@@ -74,6 +75,7 @@ export default async function startServer(
 
   gracefulShutdown(httpServer);
 
+  await initDefaults();
   logger.info(`Server started at ${IP}:${PORT}`);
   return httpServer;
 }

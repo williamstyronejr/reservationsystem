@@ -5,6 +5,7 @@ interface UserAttributes {
   username: string;
   hash: string;
   email: string;
+  profileImage: string;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
@@ -36,6 +37,10 @@ export default (sequelize: Sequelize): any => {
         unique: true,
       },
       hash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      profileImage: {
         type: DataTypes.STRING,
         allowNull: false,
       },

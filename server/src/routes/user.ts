@@ -1,15 +1,26 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import multer from 'multer';
 import { requireLocalSignin } from '../middlewares/auth';
 import {
   validateAccountUpdate,
   validatePasswordUpdate,
 } from '../middlewares/validation';
 import { compareHash } from '../utils/utils';
-import { updateUserById, updateUserPassword } from '../services/user';
+import {
+  findUserById,
+  updateUserById,
+  updateUserPassword,
+} from '../services/user';
+import { uploadFile } from '../middlewares/user';
+import { removeFirebaseFile, defaultUrls } from '../services/firebase';
 
 const jsonParser = bodyParser.json({});
 const router = Router();
+
+const profileImageParser = multer({
+  storage: multer.memoryStorage(),
+}).single('profile');
 
 router.get(
   '/session',
@@ -58,8 +69,9 @@ router.post(
 router.post(
   '/settings/account',
   jsonParser,
-  validateAccountUpdate,
   requireLocalSignin,
+  validateAccountUpdate,
+  uploadFile,
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, username } = req.body;
     const { id } = req.user as any;
@@ -94,4 +106,54 @@ router.post(
     }
   },
 );
+
+router.post(
+  '/settings/account/profile',
+  requireLocalSignin,
+  profileImageParser,
+  uploadFile,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.user as any;
+    const { remove } = req.body;
+    const { fileLoc } = res.locals;
+
+    if (!fileLoc) return res.json({ success: false });
+
+    try {
+      const oldUser = await findUserById(id);
+      if (!oldUser) return res.json({ success: false });
+
+      if (remove) {
+        if (oldUser.profileImage === defaultUrls.profileImage)
+          return res.json({ success: false });
+
+        const results = await updateUserById(id, {
+          profileImage: defaultUrls.profileImage,
+        });
+
+        if (results[0] === 1)
+          await removeFirebaseFile((oldUser as any).profileImage);
+
+        return res.json({
+          success: true,
+          profileImage: defaultUrls.profileImage,
+        });
+      }
+
+      const { url } = fileLoc[0];
+      const user = await updateUserById(
+        id,
+        { profileImage: url },
+        { returning: false },
+      );
+
+      if (!user) return res.json({ success: false });
+
+      res.json({ success: true, profileImage: url });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 export default router;
