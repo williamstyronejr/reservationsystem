@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import {
   BarChart,
@@ -8,9 +9,11 @@ import {
   YAxis,
   ResponsiveContainer,
 } from 'recharts';
+import { useQuery } from 'react-query';
+import LoadingScreen from '../../../components/LoadingScreen';
 import './styles/storePage.css';
 
-const data: Record<string, Array<any>> = {
+const chartData: Record<string, Array<any>> = {
   monday: [
     {
       name: '1am',
@@ -885,6 +888,14 @@ const StorePage = () => {
   const [dayTraffic, setDayTraffic] = React.useState<string>('monday');
   const { storeId } = useParams();
 
+  const { isLoading, data } = useQuery(
+    `/dashboard/store/${storeId}`,
+    async () => {
+      const res = await axios(`/dashboard/store/${storeId}`);
+      return res.data;
+    },
+  );
+
   const store = {
     name: 'Title',
 
@@ -899,10 +910,12 @@ const StorePage = () => {
     ],
   };
 
+  if (isLoading) return <LoadingScreen />;
+
   return (
     <section className="store">
       <header className="store__header">
-        <h2 className="store__heading">{store.name}</h2>
+        <h2 className="store__heading">{data.name}</h2>
 
         <button
           className="store__settings"
@@ -1025,7 +1038,7 @@ const StorePage = () => {
             <BarChart
               width={500}
               height={300}
-              data={data[dayTraffic]}
+              data={chartData[dayTraffic]}
               margin={{
                 top: 5,
                 right: 30,
