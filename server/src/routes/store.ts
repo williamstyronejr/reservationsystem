@@ -172,8 +172,18 @@ router.post(
         tags,
       });
 
-      if (rowsChanged === 0) return res.json({ success: false });
-      return res.json({ success: true, store: results[0].dataValues });
+      if (rowsChanged === 0) {
+        const unknownError: any = new Error(
+          `Store, ${id}, could not be updated.`,
+        );
+        unknownError.status = 400;
+        unknownError.msg = {
+          general: 'An error occurred on during update, please try again.',
+        };
+        return next(unknownError);
+      }
+
+      return res.json({ ...results[0].dataValues });
     } catch (err: any) {
       // Invalid or non existing store ids
       if (
