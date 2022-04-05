@@ -54,7 +54,7 @@ export default async function startServer(
 ): Promise<ServerAsync> {
   const httpServer: ServerAsync = http.createServer(app);
 
-  await db.sequelize.sync({ force: true });
+  await db.sequelize.sync({ force: false });
   await setupRedis(REDIS_HOST, parseInt(REDIS_PORT as string, 10), REDIS_URL);
 
   await new Promise<void>((res) => {
