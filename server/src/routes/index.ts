@@ -3,6 +3,7 @@ import { Application, Request, Response, NextFunction } from 'express';
 import AuthRouter from './auth';
 import UserRouter from './user';
 import StoreRouter from './store';
+import DasboardRouter from './dashboard';
 import logger from '../services/logger';
 
 const { NODE_ENV } = process.env;
@@ -11,6 +12,7 @@ export default function setupRoutes(app: Application) {
   app.use(AuthRouter);
   app.use(UserRouter);
   app.use(StoreRouter);
+  app.use(DasboardRouter);
 
   app.get('/getCSRFToken', (req: Request, res: Response) => {
     res.json({ CSRFToken: req.csrfToken() });
