@@ -1,28 +1,30 @@
 import * as React from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { Link } from 'react-router-dom';
+import { useInfiniteQuery } from 'react-query';
+import axios from 'axios';
 import './styles/index.css';
 
 const StoresPage = () => {
   const [search, setSearch] = React.useState<string>('');
-  const [list, setList] = React.useState([
-    {
-      id: '123',
-      name: 'store name 1',
+
+  const { isLoading, data, hasNextPage, fetchNextPage } = useInfiniteQuery(
+    '/dashboard/stores',
+    async ({ pageParam = 0 }) => {
+      const res = await axios(`/dashboard/stores?cursor=${pageParam}`);
+
+      return res.data;
     },
-  ]);
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.stores.length === 10 ? lastPage.cursor : undefined,
+    },
+  );
 
   const [scrollRef] = useInfiniteScroll({
-    loading: list.length > 10,
-    hasNextPage: true,
-    onLoadMore: () =>
-      setList([
-        ...list,
-        {
-          id: `${list[list.length - 1].id}1`,
-          name: `Store name ${list.length}`,
-        },
-      ]),
+    loading: isLoading,
+    hasNextPage: hasNextPage || true,
+    onLoadMore: fetchNextPage,
     rootMargin: '0px 0px 400px 0px',
   });
 
@@ -53,15 +55,29 @@ const StoresPage = () => {
       </header>
 
       <ul className="stores__list">
-        {list.map((store) => (
-          <li className="stores__item" key={`store-${store.id}`}>
-            <Link className="stores__link" to={`/dashboard/stores/${store.id}`}>
-              <p className="stores__title">{store.name}</p>
-            </Link>
+        {data && data.pages && data.pages[0].stores.length > 0 ? (
+          data.pages.map((arr) =>
+            arr.stores.map((store: any) => (
+              <li
+                className="stores__item"
+                key={`store-${store.id}-${arr.cursor}`}
+              >
+                <Link
+                  className="stores__link"
+                  to={`/dashboard/stores/${store.id}`}
+                >
+                  <p className="stores__title">{store.name}</p>
+                </Link>
+              </li>
+            )),
+          )
+        ) : (
+          <li className="stores__item stores__item--empty">
+            Open your store today
           </li>
-        ))}
+        )}
 
-        {true ? (
+        {hasNextPage ? (
           <li className="stores__item" ref={scrollRef}>
             Loading
           </li>
