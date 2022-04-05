@@ -80,3 +80,26 @@ export function getStoreWithComments(storeId: string): any {
     ],
   });
 }
+
+/**
+ * Finds all stores that a user owns/manages using their id.
+ * @param userId Id of user that manages the stores
+ * @param limit Number of stores to return
+ * @param offset Number of stores to skip
+ * @returns {Promise<Array<any>>} Returns a promise to resolve with an array of
+ *  store objects
+ */
+export async function findStoresByUserId(
+  userId: string,
+  limit = 10,
+  offset = 0,
+): Promise<any> {
+  return db.models.Store.findAll({
+    where: {
+      manager: userId,
+    },
+    order: [['updatedAt', 'DESC']],
+    offset,
+    limit,
+  });
+}
