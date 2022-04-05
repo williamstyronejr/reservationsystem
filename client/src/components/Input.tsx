@@ -5,13 +5,15 @@ const Input = ({
   type,
   error,
   label,
+  defaultValue,
 }: {
   label: string;
   name: string;
   type: string;
   error: string | null;
+  defaultValue?: string | null;
 }) => {
-  const [value, setValue] = React.useState<string>('');
+  const [value, setValue] = React.useState<string>(defaultValue || '');
 
   return (
     <label className="form__label" htmlFor={`${name}-input`}>
@@ -41,6 +43,10 @@ const Input = ({
       )}
     </label>
   );
+};
+
+Input.defaultProps = {
+  defaultValue: null,
 };
 
 export default Input;
