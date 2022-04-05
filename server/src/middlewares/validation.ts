@@ -97,7 +97,14 @@ export const validateStore = [
   checkValidation,
 ];
 
-export const validateStoreUpdate = [checkValidation];
+export const validateStoreUpdate = [
+  body('name', 'Invalid store name')
+    .optional()
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Must provide store name'),
+  checkValidation,
+];
 
 /**
  * Validate rules for a user review for a store
