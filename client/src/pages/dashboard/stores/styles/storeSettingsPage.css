@@ -1,0 +1,78 @@
+.store-settings {
+  border-radius: 5px;
+}
+
+.store-settings__header {
+  padding: 20px 0;
+}
+
+.store-settings__container {
+  background-color: #ffffff;
+}
+
+.store-settings__aside {
+}
+
+.store-settings__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.store-settings__item {
+}
+
+.store-settings__navbtn {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px 0 10px 10px;
+  text-align: left;
+}
+
+.time {
+}
+
+.time__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.time__select {
+  appearance: none;
+}
+
+@media only screen and (min-width: 600px) {
+  .store-settings__container {
+    display: flex;
+    flex-flow: row nowrap;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .store-settings__aside {
+    width: 200px;
+    flex: 0 1 auto;
+    margin-right: 20px;
+    border-right: 1px solid black;
+  }
+
+  .store-settings__navbtn {
+    background-color: transparent;
+    border: none;
+    border-right: 1px solid transparent;
+    padding: 15px 0;
+    text-align: center;
+  }
+
+  .store-settings__navbtn--active,
+  .store-settings__navbtn:hover {
+    border-color: #000000;
+    background-color: var(--color-menu-hover);
+  }
+
+  .store-settings__content {
+    flex: 1 0 auto;
+  }
+}

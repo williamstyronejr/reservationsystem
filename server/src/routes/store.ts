@@ -5,6 +5,7 @@ import { requireLocalSignin } from '../middlewares/auth';
 import {
   validateReview,
   validateStore,
+  validateStoreItems,
   validateStoreUpdate,
 } from '../middlewares/validation';
 import {
@@ -17,6 +18,8 @@ import {
 import { createReview, deleteReview, findReviewById } from '../services/review';
 import { uploadFile } from '../middlewares/user';
 import { defaultUrls, removeFirebaseFile } from '../services/firebase';
+import { createTime, deleteStoreTimes } from '../services/operationTime';
+import { createStoreItem, getAllStoreItems } from '../services/item';
 
 const jsonParser = bodyParser.json({});
 const storeImageParser = multer({ storage: multer.memoryStorage() }).fields([
@@ -90,6 +93,40 @@ router.get(
         return next(err);
       }
       next(err);
+    }
+  },
+);
+
+router.get(
+  '/store/:storeId/layout',
+  requireLocalSignin,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { storeId } = req.params;
+
+    try {
+      // Check items aren't reserved or locked in redis
+      const items = await getAllStoreItems(storeId);
+
+      return res.json({ items });
+    } catch (err) {
+      return next(err);
+    }
+  },
+);
+
+router.get(
+  '/store/:storeId/times',
+  jsonParser,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { storeId } = req.params;
+
+    try {
+      // Check items aren't reserved or locked in redis
+      const items = await getAllStoreItems(storeId);
+
+      return res.json({ items });
+    } catch (err) {
+      return next(err);
     }
   },
 );
@@ -278,6 +315,78 @@ router.post(
       return res.json({ success: true, fields: params });
     } catch (err) {
       return next(err);
+    }
+  },
+);
+
+router.post(
+  '/store/:storeId/update/hours',
+  requireLocalSignin,
+  jsonParser,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.user as any;
+    const { storeId } = req.params;
+    const { times } = req.body;
+
+    try {
+      await deleteStoreTimes(storeId);
+
+      const proms: Array<Promise<any>> = [];
+
+      times.forEach((time: any) => {
+        proms.push(
+          createTime(storeId, time.day, time.openTime, time.closeTime, id),
+        );
+      });
+
+      const timeSlot = await Promise.all(proms);
+
+      return res.json({ times: timeSlot });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.post(
+  '/store/:storeId/update/layout',
+  jsonParser,
+  requireLocalSignin,
+  validateStoreItems,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.user as any;
+    const { storeId } = req.params;
+    const { items } = req.body;
+
+    try {
+      const store = await getStoreById(storeId);
+
+      if (!store) {
+        const missingErr: any = new Error(`Store, ${id}, does not exist.`);
+        missingErr.status = 404;
+        return next(missingErr);
+      }
+
+      if (store.manager !== id) {
+        const permissionError: any = new Error(
+          `User, ${id}, does not have permission to alter store, ${storeId}`,
+        );
+        permissionError.status = 403;
+        return next(permissionError);
+      }
+
+      const createProms: Array<Promise<any>> = [];
+      items.forEach((item: any) => {
+        createProms.push(
+          createStoreItem(item.type, item.level, item.length, storeId, id),
+        );
+      });
+
+      await Promise.all(createProms);
+
+      return res.json({});
+    } catch (err) {
+      next(err);
     }
   },
 );

@@ -1,0 +1,35 @@
+.dashboard {
+  padding: 0 10px;
+}
+
+.dashboard__options {
+  margin: 10px 0;
+}
+
+.dashboard__tiles {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.dashboard__tile {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-right: 10px;
+}
+
+.dashboard__tile-heading {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+
+.dashboard__tile-amount {
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.dashboard__chart {
+  width: 100%;
+  height: 300px;
+}

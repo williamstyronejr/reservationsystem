@@ -116,4 +116,20 @@ export const validateReview = [
     .trim()
     .isLength({ max: 500 })
     .withMessage('Review must be no longer than 500 characters.'),
+  checkValidation,
 ];
+
+export const validateStoreItems = [
+  body('items', 'Invalid item').custom((val) => {
+    if (!Array.isArray(val)) return false;
+
+    for (let i = 0; i < val.length; i += 1) {
+      if (!val[i].type || !val[i].level || !val[i].length) return false;
+    }
+
+    return true;
+  }),
+  checkValidation,
+];
+
+export const validateReservationCreation = [checkValidation];

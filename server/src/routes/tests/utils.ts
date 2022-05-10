@@ -110,3 +110,42 @@ export async function createReview(
 
   return res.statusCode !== 200 ? null : res.body.review;
 }
+
+export async function createReservation(
+  request: any,
+  server: any,
+  csrfToken: string,
+  cookie: string,
+  params: {
+    storeId: string;
+    startDate: Date;
+    endDate: Date;
+  },
+): Promise<any> {
+  const res = await request(server)
+    .post('/reservation/create')
+    .set('csrf-token', csrfToken)
+    .set('Cookie', cookie)
+    .send(params)
+    .expect(200);
+
+  return res.statusCode !== 200 ? null : res.body;
+}
+
+export async function createStoreItems(
+  request: any,
+  server: any,
+  csrfToken: string,
+  cookie: string,
+  storeId: string,
+  items: Array<{ type: number; level: number; length: number }>,
+): Promise<any> {
+  const res = await request(server)
+    .post(`/store/${storeId}/update/layout`)
+    .set('csrf-token', csrfToken)
+    .set('Cookie', cookie)
+    .send({ items })
+    .expect(200);
+
+  return res.statusCode !== 200 ? null : res.body;
+}

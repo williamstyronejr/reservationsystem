@@ -31,7 +31,7 @@ export function createStore(
  *  rows deleted.
  */
 export function deleteStore(storeId: string, ownerId: string): any {
-  return db.models.Store.destory({ where: { id: storeId, manager: ownerId } });
+  return db.models.Store.destroy({ where: { id: storeId, manager: ownerId } });
 }
 
 /**
@@ -76,6 +76,10 @@ export function getStoreWithComments(storeId: string): any {
     include: [
       {
         model: db.models.Review,
+      },
+      {
+        model: db.models.OperationTime,
+        as: 'openTimes',
       },
     ],
   });

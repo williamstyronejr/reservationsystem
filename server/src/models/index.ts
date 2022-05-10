@@ -3,6 +3,9 @@ import User from './User';
 import Store from './Store';
 import Review from './Review';
 import Reservation from './Reservation';
+import SeatReserved from './SeatReserved';
+import OperationTime from './OperationTime';
+import Item from './Item';
 
 const { DATABASE_URL } = process.env;
 
@@ -15,6 +18,9 @@ const models: any = {
   User: User(sequelize),
   Store: Store(sequelize),
   Reservation: Reservation(sequelize),
+  OperationTime: OperationTime(sequelize),
+  Item: Item(sequelize),
+  SeatReserved: SeatReserved(sequelize),
 };
 
 Object.keys(models).forEach((key) => {

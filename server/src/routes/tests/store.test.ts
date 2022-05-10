@@ -152,6 +152,18 @@ describe('GET /dashboard/store/:storeId', () => {
   });
 });
 
+describe('GET /store/:storeId/times', () => {
+  const routeToTest = (id: string | number) => `/store/${id}/times`;
+
+  test('Non existing store should throw 404 error', async () => {
+    await request(server)
+      .post(routeToTest(0))
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .expect(404);
+  });
+});
+
 describe('POST /store/create', () => {
   const name = 'testing';
   const location = '123 street';
@@ -348,6 +360,62 @@ describe('POST /store/:storeId/update/image', () => {
 
     expect(res.body.success).toBeTruthy();
     expect(res.body.fields.icon).toBeDefined();
+  });
+});
+
+describe('POST /store/:storeId/update/layout', () => {
+  const routeToTest = (id: string | number) => `/store/${id}/update/layout`;
+
+  test('Non auth request should throw 401 error', async () => {
+    await request(server)
+      .post(routeToTest(storeId))
+      .set('Cookie', cookieNonAuth)
+      .set('csrf-token', csrfTokenNonAuth)
+      .expect(401);
+  });
+
+  test('Non existing store should throw 404 error', async () => {
+    const items: Array<any> = [];
+
+    await request(server)
+      .post(routeToTest(0))
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .send({ items })
+      .expect(404);
+  });
+
+  test('Request made by user without permission should throw 403 error', async () => {
+    const items: Array<any> = [];
+
+    await request(server)
+      .post(routeToTest(storeId))
+      .set('Cookie', cookie2)
+      .set('csrf-token', csrfToken2)
+      .send({ items })
+      .expect(403);
+  });
+
+  test('Invalid params should throw 400 error', async () => {
+    const items = [{ length: '', type: '', level: '' }, { invalid: 'test' }];
+
+    await request(server)
+      .post(routeToTest(storeId))
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .send({ items })
+      .expect(400);
+  });
+
+  test('Valid params should response 200 with store layout', async () => {
+    const items: Array<any> = [];
+
+    await request(server)
+      .post(routeToTest(storeId))
+      .set('Cookie', cookie)
+      .set('csrf-token', csrfToken)
+      .send({ items })
+      .expect(200);
   });
 });
 

@@ -6,9 +6,9 @@ import axios from 'axios';
 import ReviewModal from '../../components/ReviewModal';
 import Modal from '../../components/Modal';
 import 'react-datepicker/dist/react-datepicker.css';
-import './styles/storePage.css';
 import StoreLayout from '../../components/StoreLayout';
 import LoadingScreen from '../../components/LoadingScreen';
+import './styles/storePage.css';
 
 const NoStoreFound = () => (
   <section className="store store--missing">Store not found</section>
@@ -26,8 +26,8 @@ const StorePage = () => {
     return Object.keys(data).length === 0 ? null : data;
   });
 
-  if (!store) return <NoStoreFound />;
   if (isLoading) return <LoadingScreen />;
+  if (!store) return <NoStoreFound />;
 
   return (
     <section className="store">
@@ -48,7 +48,7 @@ const StorePage = () => {
           src={store.headerImage}
           alt="Store header"
         />
-        <img className="store__icon" src={store.storeIcon} alt="Store icon" />
+        <img className="store__icon" src={store.icon} alt="Store icon" />
 
         <div className="store__wrapper">
           <h3 className="store__heading">{store.name}</h3>
@@ -89,6 +89,12 @@ const StorePage = () => {
         ) : null}
 
         <ul className="store__reviews-list">
+          {store.reviews.length === 0 && (
+            <li className="store__reviews-item store__reviews-item--empty">
+              No reviews
+            </li>
+          )}
+
           {store.reviews.map((review: any) => (
             <li className="store__reviews-item" key={`review-${review.id}`}>
               <button

@@ -19,6 +19,7 @@ import AnalyticsPage from './pages/dashboard/analytics';
 import CalendarPage from './pages/dashboard/calendar';
 import SettingsPage from './pages/settings/SettingsPage';
 import ManageLayoutPage from './pages/dashboard/stores/ManageLayoutPage';
+import ReservationsPage from './pages/dashboard/stores/ReservationsPage';
 import ReviewsPage from './pages/stores/ReviewPage';
 import StoreSettingsPage from './pages/dashboard/stores/StoreSettingsPage';
 
@@ -101,6 +102,10 @@ const DashboardPages = [
   {
     path: '/dashboard/stores/:storeId/settings',
     component: <StoreSettingsPage />,
+  },
+  {
+    path: '/dashboard/stores/:storeId/reservations',
+    component: <ReservationsPage />,
   },
 ];
 
