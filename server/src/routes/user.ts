@@ -156,4 +156,18 @@ router.post(
   },
 );
 
+router.post(
+  '/settings/account/delete',
+  requireLocalSignin,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.user as any;
+
+    try {
+      return res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 export default router;

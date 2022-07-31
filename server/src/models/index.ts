@@ -9,7 +9,7 @@ import Item from './Item';
 
 const { DATABASE_URL } = process.env;
 
-const options: Options = {};
+const options: Options = { logging: () => {} };
 
 const sequelize = new Sequelize(DATABASE_URL || '', options);
 

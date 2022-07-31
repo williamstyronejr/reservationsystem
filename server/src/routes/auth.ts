@@ -91,9 +91,18 @@ router.post(
 router.post(
   '/signout',
   async (req: Request, res: Response, next: NextFunction) => {
-    req.logOut();
+    try {
+      await new Promise<void>((resolve, rej) => {
+        req.logOut((err) => {
+          if (err) rej(err);
+          resolve();
+        });
+      });
 
-    res.json({ success: true });
+      res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
   },
 );
 

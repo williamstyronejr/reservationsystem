@@ -12,7 +12,7 @@ import { uploadFirebaseFile } from '../services/firebase';
 async function createFileName(file: any): Promise<string> {
   return new Promise((res, rej) => {
     pseudoRandomBytes(8, (err, buf) => {
-      const ext = mime.extension(file.mimetype);
+      const ext = mime.getExtension(file.mimetype);
       if (err) return res(`${file.filename}-${Date.now()}.${ext}`);
 
       return res(`${buf.toString('hex')}-${Date.now()}.${ext}`);

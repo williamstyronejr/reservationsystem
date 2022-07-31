@@ -1,0 +1,28 @@
+.page--header {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 60px;
+  background-color: red;
+  padding: 0 10px;
+}
+
+.page__nav {
+  flex: 1 0 auto;
+}
+
+.page__list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page__user-menu {
+  flex: 0 1 auto;
+}
+
+.page__user-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
